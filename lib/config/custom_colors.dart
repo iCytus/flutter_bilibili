@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
 
 class _Colours {
   static const Color app_main = Color(0xFF666666);
@@ -82,6 +81,7 @@ class CustomThemeConfig {
   static ThemeData get biliPinkData => ThemeData(
       brightness: Brightness.light,
       scaffoldBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
+      cardColor: Colors.white,
       primaryColor: const Color(0xffFB7299),
       primaryColorLight: const Color.fromRGBO(251, 114, 153, 1),
       primarySwatch: createMaterialColor(const Color.fromRGBO(251, 114, 153, 1)),
@@ -89,16 +89,19 @@ class CustomThemeConfig {
       bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white, elevation: 0),
       tabBarTheme: const TabBarTheme(
           labelColor: Colors.white,
-          //indicator: TabBarGradientIndicator(gradientColor: [Colors.white, Colors.white], indicatorWidth: 4),
           indicatorColor: Colors.white,
           unselectedLabelColor: Colors.white),
-      iconTheme: const IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: Colors.grey),
       fontFamily: "Alibaba",
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(height: 25, minWidth: 10, buttonColor: Color.fromRGBO(251, 114, 153, 1)));
 
   static ThemeData get biliWhiteData => ThemeData(
       brightness: Brightness.light,
+
       scaffoldBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
+      cardColor: Colors.white,
       primaryColor: const Color(0xffFFFFFf),
       primaryColorLight: const Color.fromRGBO(255, 255, 255, 1),
       primarySwatch: createMaterialColor(const Color.fromRGBO(255, 255, 255, 1)),
@@ -107,11 +110,12 @@ class CustomThemeConfig {
       bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white, elevation: 0),
       tabBarTheme: const TabBarTheme(
           labelColor: Color.fromRGBO(251, 114, 153, 1),
-          //indicator: TabBarGradientIndicator(gradientColor: [Color(0xffFB7299), Color(0xffFB7299)], indicatorWidth: 4),
           indicatorColor: Color.fromRGBO(251, 114, 153, 1),
           unselectedLabelColor: Colors.black26),
       iconTheme: const IconThemeData(color: Colors.grey),
       fontFamily: "Alibaba",
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(height: 25, minWidth: 10, buttonColor: Color.fromRGBO(251, 114, 153, 1)));
 
   static ThemeData get biliBlackData => ThemeData(
@@ -131,6 +135,8 @@ class CustomThemeConfig {
           unselectedLabelColor: Colors.white),
       iconTheme: const IconThemeData(color: Colors.grey),
       fontFamily: "Alibaba",
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(height: 25, minWidth: 10, buttonColor: Color.fromRGBO(251, 114, 153, 1)));
 }
 

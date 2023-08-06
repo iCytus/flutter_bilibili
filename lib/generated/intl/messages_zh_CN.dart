@@ -47,6 +47,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "receivingInformation": MessageLookupByLibrary.simpleMessage("收货信息"),
         "recommendSetup": MessageLookupByLibrary.simpleMessage("首页推荐设置"),
         "recommended": MessageLookupByLibrary.simpleMessage("推荐"),
+        "settings": MessageLookupByLibrary.simpleMessage("设置"),
         "sleepReminder": MessageLookupByLibrary.simpleMessage("睡眠提醒"),
         "splash": MessageLookupByLibrary.simpleMessage("开屏画面设置"),
         "timingClosure": MessageLookupByLibrary.simpleMessage("定时关闭"),

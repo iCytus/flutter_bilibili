@@ -10,6 +10,7 @@
   "Posts": "Posts",
   "followers": "Followers",
   "following": "Following",
+  "settings": "settings",
 
   "account": "account",
   "private": "private",
@@ -18,7 +19,7 @@
   "recommendSetup": "recommendSetup",
   "play": "play",
   "cache": "cache",
-  "binge": "追番/binge",
+  "binge": "binge",
   "message": "message",
   "push": "push",
   "other": "other",

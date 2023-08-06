@@ -42,7 +42,7 @@ void showLoginModal(BuildContext context) {
                       text: "使用手机登录",
                       textStyle: TextStyle(fontSize: 18.sp),
                       shape: GFButtonShape.standard,
-                      color: Theme.of(context).primaryColor,
+                      // color: Theme.of(context).buttonTheme.getFocusColor(),
                     ),
                   ),
                   SizedBox(

@@ -12,6 +12,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'blocs/home/home_bloc.dart';
+import 'blocs/video_play/video_play_bloc.dart';
 import 'config/custom_colors.dart';
 import 'gen/assets.gen.dart';
 import 'generated/l10n.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(create: (context) => CustomThemeCubit()),
               BlocProvider(create: (context) => HomeBloc()),
               BlocProvider(create: (context) => LocaleCubit()),
+              BlocProvider(create: (context) => VideoPlayBloc()),
             ],
             child: BlocBuilder<LocaleCubit, Locale>(
               builder: (context, locale) {

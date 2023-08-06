@@ -26,7 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "about": MessageLookupByLibrary.simpleMessage("about"),
         "account": MessageLookupByLibrary.simpleMessage("account"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
-        "binge": MessageLookupByLibrary.simpleMessage("追番/binge"),
+        "binge": MessageLookupByLibrary.simpleMessage("binge"),
         "cache": MessageLookupByLibrary.simpleMessage("cache"),
         "cooperation": MessageLookupByLibrary.simpleMessage("cooperation"),
         "darkSetting": MessageLookupByLibrary.simpleMessage("darkSetting"),
@@ -49,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "recommendSetup":
             MessageLookupByLibrary.simpleMessage("recommendSetup"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommend"),
+        "settings": MessageLookupByLibrary.simpleMessage("settings"),
         "sleepReminder": MessageLookupByLibrary.simpleMessage("sleepReminder"),
         "splash": MessageLookupByLibrary.simpleMessage("splash"),
         "timingClosure": MessageLookupByLibrary.simpleMessage("timingClosure"),

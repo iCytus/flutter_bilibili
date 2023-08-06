@@ -35,9 +35,8 @@ class _MinePageState extends State<MinePage> {
     {"我的NFT": Assets.images.mine.nft.image(width: 20.w, height: 20.w)},
   ];
 
-
-
   late EasyRefreshController _controller;
+  late List<Function> functions;
 
   @override
   void initState() {
@@ -46,29 +45,17 @@ class _MinePageState extends State<MinePage> {
     _controller = EasyRefreshController(
       controlFinishRefresh: true,
     );
+    functions = [
+      go2page,
+      go2page,
+      go2page,
+      go2page,
+      go2page,
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Function> functions = [
-          () {
-        print("联系客服");
-      },
-          () {
-        print("设置");
-        context.pushNamed(RouteName.setupPage);
-
-      },
-          () {
-        print("我的钱包");
-      },
-          () {
-        print("稿件管理");
-      },
-          () {
-        print("我的NFT");
-      },
-    ];
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Scaffold(
@@ -155,8 +142,6 @@ class _MinePageState extends State<MinePage> {
                                 trailing: IconButton(
                                   onPressed: () {
                                     // 个人空间
-
-
                                   },
                                   icon: const Icon(Icons.keyboard_arrow_right_outlined),
                                 ),
@@ -372,6 +357,7 @@ class _MinePageState extends State<MinePage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   Map<String, dynamic> data = alist.elementAt(index);
+                                  Function f = functions.elementAt(index);
                                   return ListTile(
                                     contentPadding: EdgeInsets.zero,
                                     dense: true,
@@ -387,6 +373,9 @@ class _MinePageState extends State<MinePage> {
                                       Icons.keyboard_arrow_right_outlined,
                                       size: 20.w,
                                     ),
+                                    onTap: () {
+                                      f();
+                                    },
                                   );
                                 }),
                           ),
@@ -399,6 +388,10 @@ class _MinePageState extends State<MinePage> {
         );
       },
     );
+  }
+
+  void go2page() {
+    context.pushNamed(RouteName.setupPage);
   }
 
   @override

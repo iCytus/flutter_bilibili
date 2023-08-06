@@ -1,9 +1,11 @@
 import 'package:bilibili_bloc/blocs/login/login_bloc.dart';
+import 'package:bilibili_bloc/models/hot_data_model.dart';
 import 'package:bilibili_bloc/views/login/login_input_page.dart';
 import 'package:bilibili_bloc/views/login/msg_verify_code_page.dart';
 import 'package:bilibili_bloc/views/mine/scan_page.dart';
 import 'package:bilibili_bloc/views/mine/set_theme_page.dart';
 import 'package:bilibili_bloc/views/mine/setup_page.dart';
+import 'package:bilibili_bloc/views/plays/video_play_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -12,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import '../blocs/bottom_tab/bottom_tab_cubit.dart';
 import '../config/default_data.dart';
 import '../main.dart';
+import '../models/videoItem_data_model.dart';
 
 class RouteName {
   static const String main = "/";
@@ -30,6 +33,8 @@ class RouteName {
   static const String scanPage = "scan_page"; // 扫码界面
   static const String themePage = "theme_page"; // 颜色主题页
   static const String personalPage = "personal_page"; // 个人空间主页
+
+  static const String videoPage = "video_page"; // 视频播放页
 
   static const String setupPage = "setup_page"; // 设置
 }
@@ -70,7 +75,15 @@ final GoRouter routers = GoRouter(initialLocation: "/", routes: <RouteBase>[
         GoRoute(path: RouteName.setupPage, name: RouteName.setupPage, builder: (context, state) {
           return SetUpPage();
         }),
-
+        GoRoute(path: RouteName.videoPage, name: RouteName.videoPage, builder: (context, state) {
+          var v = state.extra;
+          if (v is VideoItemDataModel) {
+            return VideoPlayPage(model1: v,);
+          } else if (v is HotDataModel) {
+            return VideoPlayPage(model2: v,);
+          }
+          return VideoPlayPage();
+        }),
       ])
 ], observers: [
   FlutterSmartDialog.observer

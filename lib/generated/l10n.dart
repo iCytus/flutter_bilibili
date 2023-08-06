@@ -160,6 +160,16 @@ class S {
     );
   }
 
+  /// `settings`
+  String get settings {
+    return Intl.message(
+      'settings',
+      name: 'settings',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `account`
   String get account {
     return Intl.message(
@@ -230,10 +240,10 @@ class S {
     );
   }
 
-  /// `追番/binge`
+  /// `binge`
   String get binge {
     return Intl.message(
-      '追番/binge',
+      'binge',
       name: 'binge',
       desc: '',
       args: [],

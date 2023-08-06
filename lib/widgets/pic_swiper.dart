@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Image;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../models/trend_data_model.dart';
 import 'hero.dart';
@@ -102,11 +103,11 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                     double? initialScale = 1.0;
 
                     if (state.extendedImageInfo != null) {
-                      initialScale = initScale(
-                          size: size,
-                          initialScale: initialScale,
-                          imageSize:
-                              Size(state.extendedImageInfo!.image.width.toDouble(), state.extendedImageInfo!.image.height.toDouble()));
+                      // initialScale = initScale(
+                      //     size: Size(1.sw, 1.sh),
+                      //     initialScale: initialScale,
+                      //     imageSize:
+                      //         Size(state.extendedImageInfo!.image.width.toDouble(), state.extendedImageInfo!.image.height.toDouble()));
                     }
                     return GestureConfig(
                       inPageView: true,
