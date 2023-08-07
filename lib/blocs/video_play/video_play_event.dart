@@ -15,6 +15,12 @@ class VideoPlayController extends VideoPlayEvent {
   VideoPlayController(super.isShow, super.isPlaying);
 }
 
+class VideoPlayOrPauseEvent extends VideoPlayEvent {
+  final VideoPlayerController? videoPlayerController;
+  VideoPlayOrPauseEvent(super.isShow, super.isPlaying, this.videoPlayerController);
+
+}
+
 // 视频信息文本 more ，即标题下方的详情文本
 class VideoMoreInfoEvent extends VideoPlayEvent {
   VideoMoreInfoEvent(super.isShow, super.isPlaying);

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:chewie/chewie.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 part 'video_play_event.dart';
 part 'video_play_state.dart';
@@ -13,6 +15,15 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
 
     });
     on<VideoPlayController>((event, emit) {
+
+    });
+    on<VideoPlayOrPauseEvent>((event, emit) {
+      if (event.isPlaying) {
+
+        event.videoPlayerController?.pause();
+      } else {
+        event.videoPlayerController?.play();
+      }
 
     });
     on<VideoMoreInfoEvent>((event, emit) {

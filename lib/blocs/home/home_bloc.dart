@@ -56,7 +56,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     List<LiveBannerDataModel> ll = liveBannerDataList.map((e) {
       return LiveBannerDataModel.fromJson(e);
     }).toList();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(livesList: state.livesList.toList()..addAll(list), livesBannerList: ll));
     easyRefreshController.finishRefresh();
     easyRefreshController.resetFooter();
@@ -67,7 +67,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     List<VideoItemDataModel> list = recommendDataList.map((e) {
       return VideoItemDataModel.fromJson(e);
     }).toList();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(recommendList: state.recommendList.toList()..addAll(list)));
 
     easyRefreshController.finishRefresh();
@@ -79,7 +79,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     List<HotDataModel> list = hotDataList.map((e) {
       return HotDataModel.fromJson(e);
     }).toList();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(hotList: state.hotList.toList()..addAll(list)));
     easyRefreshController.finishRefresh();
     easyRefreshController.resetFooter();
@@ -90,7 +90,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     List<TrendDataModel> list = trendsDataList.map((e) {
       return TrendDataModel.fromJson(e);
     }).toList();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(trendList: state.trendList.toList()..addAll(list)));
     easyRefreshController.finishRefresh();
     easyRefreshController.resetFooter();

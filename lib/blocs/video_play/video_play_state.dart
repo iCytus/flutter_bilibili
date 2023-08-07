@@ -23,3 +23,6 @@ class VideoPlayPause extends VideoPlayState {}
 
 // 视频加载失败 / 断网
 class VideoPlayLoadError extends VideoPlayState {}
+
+// 视频全屏播放
+class VideoPlayFullScreen extends VideoPlayState {}

@@ -39,6 +39,7 @@ dependencies:
 
   bloc: ^8.1.2
   cached_network_image: ^3.2.3  # 网络图像缓存
+  chewie: ^1.7.0  # 视频播放器
   date_format: ^2.0.7  # 时间格式化
   dio: ^5.2.1  # 网络请求
   dio_cache_interceptor: ^3.4.2
