@@ -14,7 +14,7 @@ class LocaleCubit extends HydratedCubit<Locale> {
   @override
   Locale? fromJson(Map<String, dynamic> json) {
     final theme = json['Locale'];
-    print("theme: $theme");
+    // print("theme: $theme");
     switch (theme) {
       case 'zh':
         return const Locale("zh");

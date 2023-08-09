@@ -8,6 +8,7 @@ import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../blocs/video_play/video_play_bloc.dart';
+import '../../gen/assets.gen.dart';
 import '../../models/videoItem_data_model.dart';
 import 'video_shimmer_page.dart';
 
@@ -21,10 +22,13 @@ class VideoPlayPage extends StatefulWidget {
   State<VideoPlayPage> createState() => _VideoPlayPageState();
 }
 
-class _VideoPlayPageState extends State<VideoPlayPage> {
+class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   late VideoPlayerController videoPlayerController;
   late ChewieController chewieController;
+  late AnimationController animationController;
+  late Animation<double> animation;
+  late Animation<double> _width;
 
   // 存在两组 返回和更多按钮，一个是视频播放控件里，一个是appbar
   bool isShowAppBarBtns = false; // 是否显示 返回和更多两个按钮
@@ -36,12 +40,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
     // TODO: implement initState
     super.initState();
     _scrollController.addListener(() {
-      print("滚动距离: ${_scrollController.offset} - ${1.sw * 9 / 16} - $kToolbarHeight");
       // 只有在视频暂停以及滚动距离大于 某固定值后才可以显示标题按钮等
-      if (_scrollController.offset > kToolbarHeight && true) {
-        setState(() {
-          isShowAppBarBtns = true;
-        });
+      if (_scrollController.offset > kToolbarHeight && isPaused) {
+        if (!isShowAppBarBtns) {
+          setState(() {
+            isShowAppBarBtns = true;
+          });
+        }
       } else {
         setState(() {
           isShowAppBarBtns = false;
@@ -50,16 +55,29 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
     });
 
     _changeView();
+
+    animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    animation = Tween(begin: 50.0, end: 200.0).animate(animationController);
+
+    _width = Tween<double>(begin: 110.w, end: 30.w).animate(CurvedAnimation(
+      parent: animationController,
+      curve: const Interval(0.0, 0.2, curve: Curves.ease),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<VideoPlayBloc, VideoPlayState>(
+      buildWhen: (prev, state) {
+        print("prev.runtimeType：${prev.runtimeType} - state.runtimeType: ${state.runtimeType}");
+        return prev.runtimeType != state.runtimeType || state.isReadyInput != prev.isReadyInput;
+      },
       builder: (context, state) {
-        print("state: $state");
         if (state is VideoPlayInitial) {
+          print("state-0: $state - isPlaying: ${state.isPlaying}");
           return const VideoShimmerPage();
         } else {
+          print("state-1: $state - isPlaying: ${state.isPlaying}");
           return SafeArea(
             bottom: false,
             child: DefaultTabController(
@@ -71,142 +89,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
                   controller: _scrollController,
                   headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                     return [
-                      SliverAppBar(
-                        floating: false,
-                        pinned: true,
-                        snap: false,
-                        elevation: 0,
-                        leading: isShowAppBarBtns
-                            ? IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {},
-                              )
-                            : Container(),
-                        actions: [
-                          isShowAppBarBtns
-                              ? IconButton(
-                                  icon: const Icon(
-                                    Icons.more_vert_outlined,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {},
-                                )
-                              : Container(),
-                        ],
-                        stretch: false,
-                        expandedHeight: 1.sw * 9 / 16,
-                        //collapsedHeight: state.isPlaying ? 1.sw * 9 / 16 : null, // 当值为null时可以伸展收起
-                        // collapsedHeight:  1.sw * 9 / 16,
-                        //title: const Text('标题', style: TextStyle(color: Colors.white),),
-                        centerTitle: true,
-                        primary: true,
-                        backgroundColor: const Color(0xffFB7299),
-                        flexibleSpace: FlexibleSpaceBar(
-                          title: isShowAppBarBtns
-                              ? const Text(
-                                  '标题',
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              : Container(),
-                          background: Container(
-                            color: Colors.black,
-                            height: 1.sw * 9 / 16,
-                            width: 1.sw,
-                            child: GestureDetector(
-                              onDoubleTap: () {
-                                // 双击暂停或播放
-                                print("双击暂停或播放");
-                                context
-                                    .read<VideoPlayBloc>()
-                                    .add(VideoPlayOrPauseEvent(true, videoPlayerController.value.isPlaying, videoPlayerController));
-                              },
-                              child: Chewie(
-                                controller: chewieController,
-                              ),
-                            ),
-                          ),
-                          collapseMode: CollapseMode.parallax,
-                        ),
-                      ),
-                      SliverAppBar(
-                        floating: false,
-                        pinned: true,
-                        snap: false,
-                        elevation: 0,
-                        leading: SizedBox(),
-                        actions: [
-                          isShowAppBarBtns
-                              ? IconButton(
-                                  icon: const Icon(
-                                    Icons.more_vert_outlined,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {},
-                                )
-                              : Container(),
-                        ],
-                        stretch: false,
-                        //title: const Text('标题', style: TextStyle(color: Colors.white),),
-                        centerTitle: true,
-                        primary: true,
-                        backgroundColor: const Color(0xffFB7299),
-                        bottom: PreferredSize(
-                          preferredSize: Size.fromHeight(-12.w),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 32.w,
-                              ),
-                              TabBar(
-                                onTap: (index) {
-                                  print("index：$index");
-                                },
-                                padding: EdgeInsets.zero,
-                                enableFeedback: true,
-                                tabs: ["简介", "评论"]
-                                    .map((e) => Tab(
-                                          text: e,
-                                          height: 32.w,
-                                        ))
-                                    .toList(),
-                                indicator: TabBarGradientIndicator(
-                                  gradientColor: [
-                                    Theme.of(context).tabBarTheme.indicatorColor!,
-                                    Theme.of(context).tabBarTheme.indicatorColor!
-                                  ],
-                                  indicatorWidth: 4,
-                                ),
-                                indicatorSize: TabBarIndicatorSize.label,
-                                isScrollable: true,
-                              ),
-                              Expanded(child: SizedBox()),
-                              Container(
-                                width: 30.w,
-                                color: Colors.blue,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      _buildVideoArea(),
+                      _buildTabListView(),
                     ];
                   },
                   body: TabBarView(
                     children: [
-                      Container(
-                        color: Colors.orange,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: 30,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text("index - $index"),
-                              );
-                            }),
-                      ),
+                      _buildSnapshotView(),
                       Container(
                         color: Colors.pink,
                         child: ListView.builder(
@@ -230,27 +119,246 @@ class _VideoPlayPageState extends State<VideoPlayPage> {
     );
   }
 
+  // 构建视频播放区
+  Widget _buildVideoArea() {
+    return BlocBuilder<VideoPlayBloc, VideoPlayState>(builder: (context, state) {
+      print("_buildVideoArea-state: $state");
+      return SliverAppBar(
+        floating: false,
+        pinned: true,
+        snap: false,
+        elevation: 0,
+        leading: isShowAppBarBtns
+            ? IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                ),
+                onPressed: () {},
+              )
+            : Container(),
+        actions: [
+          isShowAppBarBtns
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.more_vert_outlined,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {},
+                )
+              : Container(),
+        ],
+        stretch: false,
+        expandedHeight: 1.sw * 9 / 16,
+        collapsedHeight: state.isPlaying ? 1.sw * 9 / 16 : null, // 当值为null时可以伸展收起
+        // collapsedHeight:  1.sw * 9 / 16,
+        centerTitle: true,
+        primary: true,
+        backgroundColor: const Color(0xffFB7299),
+        flexibleSpace: FlexibleSpaceBar(
+          title: isShowAppBarBtns
+              ? const Text(
+                  '标题',
+                  style: TextStyle(color: Colors.white),
+                )
+              : Container(),
+          background: Container(
+            color: Colors.black,
+            height: 1.sw * 9 / 16,
+            width: 1.sw,
+            child: GestureDetector(
+              onDoubleTap: () {
+                // 双击暂停或播放
+                print("双击暂停或播放: ${state.isPlaying}");
+                isPaused = videoPlayerController.value.isPlaying;
+                context
+                    .read<VideoPlayBloc>()
+                    .add(VideoPlayOrPauseEvent(true, videoPlayerController.value.isPlaying, videoPlayerController));
+              },
+              child: Chewie(
+                controller: chewieController,
+              ),
+            ),
+          ),
+          collapseMode: CollapseMode.parallax,
+        ),
+      );
+    });
+  }
+
+  // 构建tabbar展开收起区
+  Widget _buildTabListView() {
+    return BlocBuilder<VideoPlayBloc, VideoPlayState>(builder: (context, state) {
+      print("_buidlTabListView-state: $state");
+      return SliverAppBar(
+        floating: false,
+        pinned: true,
+        snap: false,
+        elevation: 0,
+        leading: SizedBox(),
+        actions: [
+          isShowAppBarBtns
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.more_vert_outlined,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {},
+                )
+              : Container(),
+        ],
+        stretch: false,
+        centerTitle: true,
+        primary: true,
+        backgroundColor: const Color(0xffFB7299),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(-14.w),
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            padding: EdgeInsets.only(left: 34.w, right: 12.w),
+            width: 1.sw,
+            child: Row(
+              children: [
+                _buildTabBarView(),
+                const Expanded(child: SizedBox()),
+                _buildDanmukaBtnView(state),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  // 简介&评论 tabbar
+  Widget _buildTabBarView() {
+    return TabBar(
+      onTap: (index) {
+        print("index：$index");
+      },
+      padding: EdgeInsets.zero,
+      enableFeedback: true,
+      tabs: ["简介", "评论"]
+          .map((e) => Tab(
+                text: e,
+                height: 32.w,
+              ))
+          .toList(),
+      indicator: TabBarGradientIndicator(
+        gradientColor: [Theme.of(context).tabBarTheme.indicatorColor!, Theme.of(context).tabBarTheme.indicatorColor!],
+        indicatorWidth: 4,
+      ),
+      indicatorSize: TabBarIndicatorSize.label,
+      isScrollable: true,
+    );
+  }
+
+  // tabview: 简介
+  Widget _buildSnapshotView() {
+    return ListView(
+      children: [
+        Container(
+          height: 120.w,
+          width: 1.sw,
+          color: Colors.blue,
+        ),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+            itemCount: 20,
+            itemBuilder: (context, index) {
+          return ListTile(title: Text("index - $index"),);
+        }),
+      ],
+    );
+  }
+
+  // 弹幕开关按钮
+  Widget _buildDanmukaBtnView(VideoPlayState state) {
+    return Row(
+      children: [
+        BlocSelector<VideoPlayBloc, VideoPlayState, bool>(selector: (state) {
+          return state.isReadyInput;
+        }, builder: (context, aa) {
+          return AnimatedBuilder(
+              animation: animation,
+              builder: (context, Widget? child) {
+                return Container(
+                  height: 26.w,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.w), color: Colors.grey[400]),
+                  width: _width.value,
+                  child: Row(
+                    children: [
+                      animationController.status == AnimationStatus.dismissed
+                          ? GestureDetector(
+                              onTap: () {
+                                // 这个点击时间是弹出键盘输入弹幕
+                                context.read<VideoPlayBloc>().add(
+                                    DanmakuInputEvent(false, videoPlayerController.value.isPlaying, isReadyInput: !state.isReadyInput));
+                              },
+                              child: Container(
+                                width: 80.w,
+                                height: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15.w), bottomLeft: Radius.circular(15.w))),
+                                child: Center(
+                                  child: Text(
+                                    state.isReadyInput ? "弹幕输入中" : "点我发弹幕",
+                                    style: TextStyle(fontSize: 11.sp),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      GestureDetector(
+                        onTap: () {
+                          // 从当前按钮的状态判断是 打开还是关闭 弹幕
+                          bool isDanmukaOpen = animationController.status == AnimationStatus.completed ? true : false;
+                          context.read<VideoPlayBloc>().add(DanmakuVideoEvent(false, videoPlayerController.value.isPlaying,
+                              isDanmukaOpen: isDanmukaOpen, animationController: animationController));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: animationController.status == AnimationStatus.dismissed
+                                  ? BorderRadius.only(topRight: Radius.circular(15.w), bottomRight: Radius.circular(15.w))
+                                  : BorderRadius.circular(15.w)),
+                          width: 30.w,
+                          child: Center(
+                            child: animationController.status == AnimationStatus.dismissed
+                                ? Assets.images.video.danmakuOpen.image(width: 18.w, height: 18.w)
+                                : Assets.images.video.danmakuClose.image(width: 18.w, height: 18.w),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              });
+        })
+      ],
+    );
+  }
+
   Future<void> _changeView() async {
     print(widget.model1?.uri ?? widget.model2?.shortLinkV2);
-    // videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.model1?.uri ?? widget.model2?.shortLinkV2 ?? ""));
     videoPlayerController = VideoPlayerController.networkUrl(
         Uri.parse("https://assets.mixkit.co/videos/preview/mixkit-daytime-city-traffic-aerial-view-56-large.mp4"));
     await videoPlayerController.initialize();
 
-    chewieController = ChewieController(
-      videoPlayerController: videoPlayerController,
-      autoPlay: true,
-      looping: false,
-      fullScreenByDefault: false
-      // customControls:
-    );
+    chewieController =
+        ChewieController(videoPlayerController: videoPlayerController, autoPlay: true, looping: false, fullScreenByDefault: false
+            // customControls:
+            );
     Future.delayed(const Duration(seconds: 1), () {
-      context.read<VideoPlayBloc>().emit(VideoPlayInitComplete());
+      context.read<VideoPlayBloc>().emit(const VideoPlayInitComplete(isPlaying: true));
     });
   }
 
   @override
   void deactivate() {
+    // 返回上一层，恢复未初始化的状态
     context.read<VideoPlayBloc>().emit(VideoPlayInitial());
     super.deactivate();
   }

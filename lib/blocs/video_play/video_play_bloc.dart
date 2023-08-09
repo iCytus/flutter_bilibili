@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:chewie/chewie.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
 import 'package:video_player/video_player.dart';
 
 part 'video_play_event.dart';
@@ -19,10 +16,11 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
     });
     on<VideoPlayOrPauseEvent>((event, emit) {
       if (event.isPlaying) {
-
         event.videoPlayerController?.pause();
+        emit(VideoPlayPause(isPlaying: false));
       } else {
         event.videoPlayerController?.play();
+        emit(VideoPlayInitComplete(isPlaying: true));
       }
 
     });
@@ -55,9 +53,25 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
     });
     on<DanmakuVideoEvent>((event, emit) {
 
+
+      print("controller-status: ${event.animationController.status}");
+      if (event.animationController.status == AnimationStatus.completed) {
+        event.animationController.reverse();
+      } else if (event.animationController.status == AnimationStatus.dismissed) {
+        event.animationController.forward();
+      } else if (event.animationController.status == AnimationStatus.forward) {
+        event.animationController.forward();
+      }
     });
     on<DanmakuInputEvent>((event, emit) {
-
+      //print("bloc-state: $state");
+      if (state is VideoPlayInitComplete) {
+        //print("bloc-state-1: $state");
+        emit(VideoPlayInitComplete(isPlaying: true, isReadyInput: event.isReadyInput));
+      }else if (state is VideoPlayPause) {
+        //print("bloc-state-2: $state");
+        emit(VideoPlayPause(isPlaying: false, isReadyInput: event.isReadyInput));
+      }
     });
   }
 }

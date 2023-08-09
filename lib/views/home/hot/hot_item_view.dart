@@ -58,7 +58,7 @@ class HotItemView extends StatelessWidget {
                     "${model.title}\n",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16.sp),
+                    style: TextStyle(fontSize: 14.sp),
                   ),
                   const Expanded(child: SizedBox()),
                   model.rcmdReason.content != ""
@@ -83,19 +83,15 @@ class HotItemView extends StatelessWidget {
                   const Expanded(child: SizedBox()),
                   Row(
                     children: [
-                      Container(
-                          width: 15.w,
-                          height: 10.w,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.w), border: Border.all(color: Colors.grey)),
-                          child: Center(
-                            child: Text("UP", style: TextStyle(fontSize: 9.sp, color: Colors.grey)),
-                          )),
+                      Center(
+                        child: Assets.images.custom.uperCustom.image(width: 18.w, height: 13.w),
+                      ),
                       SizedBox(
                         width: 5.w,
                       ),
                       Text(
                         model.owner.name,
-                        style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                        style: TextStyle(fontSize: 11.sp, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -107,7 +103,7 @@ class HotItemView extends StatelessWidget {
                       ),
                       Text(
                         "${viewCount(model.stat.view)}观看・${timeAgo2Str(model.pubdate)}",
-                        style: TextStyle(fontSize: 13.sp, color: Colors.grey),
+                        style: TextStyle(fontSize: 11.sp, color: Colors.grey),
                       ),
                       const Expanded(child: SizedBox()),
                       GestureDetector(

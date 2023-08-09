@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 
+import 'package:bilibili_bloc/widgets/test_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -148,23 +149,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: ()  async {
+              /* 语言切换
               var locale = Localizations.localeOf(context);
               print("locale: ${locale.languageCode}");
-              //await S.load(const Locale('zh', "CN"));
-              // if (locale.languageCode == "en") {
-              //   await S.load(const Locale('zh', "CN"));
-              //   //FlutterI18n.refresh(context, const Locale('zh', 'CN'));
-              // }
-              // if (locale.languageCode == "zh") {
-              //   await S.load(const Locale('en', ""));
-              //   //FlutterI18n.refresh(context, const Locale('en', 'US'));
-              // }
               if (locale.languageCode == "zh") {
                 context.read<LocaleCubit>().changeLocale(const Locale('en', 'US'));
               } else {
                 context.read<LocaleCubit>().changeLocale(const Locale('zh'));
               }
-
+              */
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TestPage();
+              }));
             },
             child: Icon(Icons.add),
           ),

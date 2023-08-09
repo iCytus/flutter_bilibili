@@ -48,21 +48,24 @@ dependencies:
   easy_refresh: ^3.3.2  # 刷新
   equatable: ^2.0.4
   extended_image: ^7.0.2  # 图片
-  rich_readmore: ^1.0.5  # 更多文本
+
   flutter_bloc: ^8.1.2
   flutter_inappwebview: ^5.5.0+5  # webview
-  hydrated_bloc: ^9.1.2
+  flutter_sequence_animation: ^4.0.0
+
 
   flutter_smart_dialog: ^4.9.3+2  # 弹窗
   flutter_svg: ^2.0.1  # svg图片加载
   flutter_screenutil: ^5.6.0  # 屏幕尺寸
   getwidget: ^3.1.1
   go_router: ^9.0.0  # 路由
+  hydrated_bloc: ^9.1.2
   modal_bottom_sheet: ^3.0.0-pre
   path_provider: ^2.0.15
   permission_handler: ^10.2.0
   permission_handler_platform_interface: ^3.7.0
   provider: ^6.0.3
+  rich_readmore: ^1.0.5  # 更多文本
   scan: # 二维码扫描
     git:
       url: https://github.com/xiaoxie/flutter_scan.git
@@ -105,6 +108,7 @@ flutter:
     - assets/images/mine/
     - assets/images/trends/
     - assets/images/custom/
+    - assets/images/video/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
