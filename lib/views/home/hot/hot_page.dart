@@ -37,7 +37,7 @@ class _HotPageState extends State<HotPage> {
             controller: _easyRefreshController,
             childBuilder: (BuildContext context, ScrollPhysics physics) {
               return Padding(
-                padding: EdgeInsets.only(left: 6.w, right: 6.w, top: 6.w),
+                padding: EdgeInsets.only(left: 6.w, right: 6.w),
                 child: ListView.separated(
                   padding: EdgeInsets.zero,
                   physics: physics,

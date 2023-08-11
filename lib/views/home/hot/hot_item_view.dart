@@ -15,9 +15,10 @@ class HotItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 6.w),
+      padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 6.w),
       width: 1.sw,
-      height: (1.sw - 46.w) / 32 * 9 + 16.w,
+      height: (1.sw - 46.w) / 32 * 9 + 20.w,
+      color: Theme.of(context).cardColor,
       child: Row(
         children: [
           Container(
@@ -55,24 +56,24 @@ class HotItemView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${model.title}\n",
+                      "${model.title}\n",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 14.sp),
+                      style: TextStyle(fontSize: 13)
                   ),
                   const Expanded(child: SizedBox()),
                   model.rcmdReason.content != ""
                       ? Row(
                           children: [
                             Container(
-                                padding: EdgeInsets.symmetric(vertical: 2.w, horizontal: 2.w),
+                                padding: EdgeInsets.symmetric(vertical: 1.5.w, horizontal: 2.w),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2.w), border: Border.all(width: 0.8, color: Colors.orange[700]!)),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Center(
-                                      child: Text(model.rcmdReason.content, style: TextStyle(fontSize: 9.sp, color: Colors.orange[700]!)),
+                                      child: Text(model.rcmdReason.content, style: TextStyle(fontSize: 10.sp, color: Colors.orange[700]!)),
                                     )
                                   ],
                                 )),
@@ -91,7 +92,7 @@ class HotItemView extends StatelessWidget {
                       ),
                       Text(
                         model.owner.name,
-                        style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+                        style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -103,7 +104,7 @@ class HotItemView extends StatelessWidget {
                       ),
                       Text(
                         "${viewCount(model.stat.view)}观看・${timeAgo2Str(model.pubdate)}",
-                        style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+                        style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                       ),
                       const Expanded(child: SizedBox()),
                       GestureDetector(

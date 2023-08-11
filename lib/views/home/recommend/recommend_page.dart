@@ -45,7 +45,7 @@ class _RecommendPageState extends State<RecommendPage> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10.w, // 上下两行间距
                   crossAxisSpacing: 10.w,
-                  childAspectRatio: 1,
+                  childAspectRatio: 0.97,
                 ),
                 itemCount: list.length,
                 itemBuilder: (BuildContext context, int index) {

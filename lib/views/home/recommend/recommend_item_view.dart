@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bilibili_bloc/models/videoItem_data_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import '../../../widgets/simple_widget.dart';
 class RecommendItemView extends StatelessWidget {
   VideoItemDataModel model;
   RecommendItemView({super.key, required this.model});
+  double imageFontSize = 10.sp;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class RecommendItemView extends StatelessWidget {
                                 ),
                                 Text(
                                   viewCount(model.stat.view),
-                                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                                  style: TextStyle(fontSize: imageFontSize, color: Colors.white),
                                 ),
                                 SizedBox(
                                   width: 13.w,
@@ -63,12 +65,12 @@ class RecommendItemView extends StatelessWidget {
                                 ),
                                 Text(
                                   viewCount(model.stat.danmaku),
-                                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                                  style: TextStyle(fontSize: imageFontSize, color: Colors.white),
                                 ),
                                 const Expanded(child: SizedBox()),
                                 Text(
                                   duration2timeStr(model.duration),
-                                  style: TextStyle(fontSize: 12.sp, color: Colors.white),
+                                  style: TextStyle(fontSize: imageFontSize, color: Colors.white),
                                 )
                               ],
                             ),
@@ -78,16 +80,16 @@ class RecommendItemView extends StatelessWidget {
                 ),
                 SizedBox(
                   width: constraints.maxWidth,
-                  height: constraints.maxWidth * 0.4 - 5,
+                  height: (constraints.maxHeight - constraints.maxWidth*0.6) - 5,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.w),
+                    padding: EdgeInsets.only(left: 7.w, right: 7.w, top: 6.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(
                             "${model.title}\n",
-                            style: TextStyle(fontSize: 13.sp, overflow: TextOverflow.ellipsis),
+                            style: const TextStyle(fontSize: 15, overflow: TextOverflow.ellipsis),
                             maxLines: 2,
                           ),
                         ),
@@ -119,7 +121,7 @@ class RecommendItemView extends StatelessWidget {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           );

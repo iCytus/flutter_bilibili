@@ -92,7 +92,7 @@ class CustomThemeConfig {
           indicatorColor: Colors.white,
           unselectedLabelColor: Colors.white),
       iconTheme: const IconThemeData(color: Colors.grey),
-      fontFamily: "Alibaba",
+      //fontFamily: "Alibaba",
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(height: 25, minWidth: 10, buttonColor: Color.fromRGBO(251, 114, 153, 1)));
@@ -113,7 +113,7 @@ class CustomThemeConfig {
           indicatorColor: Color.fromRGBO(251, 114, 153, 1),
           unselectedLabelColor: Colors.black26),
       iconTheme: const IconThemeData(color: Colors.grey),
-      fontFamily: "Alibaba",
+      //fontFamily: "Alibaba",
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(height: 25, minWidth: 10, buttonColor: Color.fromRGBO(251, 114, 153, 1)));
@@ -134,7 +134,7 @@ class CustomThemeConfig {
           indicatorColor: Color.fromRGBO(251, 114, 153, 1),
           unselectedLabelColor: Colors.white),
       iconTheme: const IconThemeData(color: Colors.grey),
-      fontFamily: "Alibaba",
+      //fontFamily: "Alibaba",
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       buttonTheme: const ButtonThemeData(height: 25, minWidth: 10, buttonColor: Color.fromRGBO(251, 114, 153, 1)));

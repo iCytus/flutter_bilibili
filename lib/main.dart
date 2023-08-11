@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
                     return MaterialApp.router(
                       debugShowCheckedModeBanner: false,
                       routerConfig: routers,
+
                       localizationsDelegates: const [
 
                         GlobalMaterialLocalizations.delegate,
@@ -101,7 +102,14 @@ class MyApp extends StatelessWidget {
                       // },
                       // theme: ThemeData(primarySwatch: createMaterialColor(const Color.fromRGBO(251, 114, 153, 1)), fontFamily: "Alibaba"),
                       theme: _getTheme(state),
-                      builder: FlutterSmartDialog.init(),
+                      builder: FlutterSmartDialog.init(
+                        builder: (context, widget) {
+                          return MediaQuery(
+                            ///Setting font does not change with system font size
+                            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: widget!,
+                          );
+                        }
+                      ),
                     );
                   },
                 );

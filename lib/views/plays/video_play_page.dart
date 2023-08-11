@@ -1,6 +1,8 @@
 import 'package:bilibili_bloc/models/hot_data_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:getwidget/getwidget.dart';
@@ -9,6 +11,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../blocs/video_play/video_play_bloc.dart';
 import '../../gen/assets.gen.dart';
+import '../../models/custom_data_model.dart';
 import '../../models/videoItem_data_model.dart';
 import 'video_shimmer_page.dart';
 
@@ -29,6 +32,8 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   late AnimationController animationController;
   late Animation<double> animation;
   late Animation<double> _width;
+
+  late Owner owner;
 
   // 存在两组 返回和更多按钮，一个是视频播放控件里，一个是appbar
   bool isShowAppBarBtns = false; // 是否显示 返回和更多两个按钮
@@ -63,6 +68,8 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
       parent: animationController,
       curve: const Interval(0.0, 0.2, curve: Curves.ease),
     ));
+
+    owner = (widget.model1?.owner ?? widget.model2?.owner)!;
   }
 
   @override
@@ -128,6 +135,14 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
         pinned: true,
         snap: false,
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          systemNavigationBarColor: Color(0xFF000000),
+          systemNavigationBarDividerColor: null,
+          statusBarColor: null,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
         leading: isShowAppBarBtns
             ? IconButton(
                 icon: const Icon(
@@ -163,8 +178,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                 )
               : Container(),
           background: Container(
-            color: Colors.black,
-            height: 1.sw * 9 / 16,
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            color: Colors.transparent,
+            //height: 1.sw * 9 / 16,
             width: 1.sw,
             child: GestureDetector(
               onDoubleTap: () {
@@ -258,17 +274,78 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
     return ListView(
       children: [
         Container(
-          height: 120.w,
+          padding: EdgeInsets.only(bottom: 10.w, left: 14.w, right: 14.w),
+          height: 140.w,
           width: 1.sw,
           color: Colors.blue,
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(owner.name),
+                subtitle: Text(owner.name),
+                leading: widget.model1 != null || widget.model2 != null
+                    ? GFAvatar(
+                        backgroundImage: CachedNetworkImageProvider(owner.face, maxWidth: 22.w.toInt(), maxHeight: 22.w.toInt()),
+                        size: 22.w,
+                      )
+                    : Assets.images.home.loginHomepage.image(width: 28.w, height: 28.w),
+                trailing: BlocBuilder<VideoPlayBloc, VideoPlayState>(
+                  buildWhen: (previous, current) {
+                    return previous.isFollow != current.isFollow;
+                  },
+                  builder: (context, state) {
+
+                    return state.isFollow
+                        ? GFButton(
+                            icon: Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 15.w,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<VideoPlayBloc>()
+                                  .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, false));
+                            },
+                            text: "已关注",
+                            color: Colors.white38,
+                            shape: GFButtonShape.pills,
+                            size: GFSize.SMALL,
+                          )
+                        : GFButton(
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 15.w,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<VideoPlayBloc>()
+                                  .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, true));
+                            },
+                            text: "关注",
+                            color: const Color.fromRGBO(251, 114, 153, 1),
+                            shape: GFButtonShape.pills,
+                            size: GFSize.SMALL,
+                          );
+                  },
+                ),
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+              ),
+
+            ],
+          ),
         ),
         ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemCount: 20,
             itemBuilder: (context, index) {
-          return ListTile(title: Text("index - $index"),);
-        }),
+              return ListTile(
+                title: Text("index - $index"),
+              );
+            }),
       ],
     );
   }
@@ -305,7 +382,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                                 child: Center(
                                   child: Text(
                                     state.isReadyInput ? "弹幕输入中" : "点我发弹幕",
-                                    style: TextStyle(fontSize: 11.sp),
+                                    style: TextStyle(fontSize: 12.sp),
                                   ),
                                 ),
                               ),
@@ -352,7 +429,8 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
             // customControls:
             );
     Future.delayed(const Duration(seconds: 1), () {
-      context.read<VideoPlayBloc>().emit(const VideoPlayInitComplete(isPlaying: true));
+      context.read<VideoPlayBloc>().emit(VideoPlayInitComplete(
+          isPlaying: true, isShow: false, isReadyInput: false, isFollow: widget.model1?.isFollowed == 1, isDanmukaOpen: true));
     });
   }
 

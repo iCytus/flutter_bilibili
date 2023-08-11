@@ -16,6 +16,7 @@ class VideoPlayController extends VideoPlayEvent {
   VideoPlayController(super.isShow, super.isPlaying);
 }
 
+// 暂停/ 继续 播放视频
 class VideoPlayOrPauseEvent extends VideoPlayEvent {
   final VideoPlayerController? videoPlayerController;
   VideoPlayOrPauseEvent(super.isShow, super.isPlaying, this.videoPlayerController);
@@ -28,7 +29,8 @@ class VideoMoreInfoEvent extends VideoPlayEvent {
 
 // 关注按钮点击
 class FollowAuthorEvent extends VideoPlayEvent {
-  FollowAuthorEvent(super.isShow, super.isPlaying);
+  bool change_follow;
+  FollowAuthorEvent(super.isShow, super.isPlaying, this.change_follow);
 }
 
 // 点赞按钮点击

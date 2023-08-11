@@ -13,7 +13,8 @@ class LiveItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.w)),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.w), color: Theme.of(context).cardColor),
+
       padding: EdgeInsets.zero,
       clipBehavior: Clip.hardEdge,
       child: LayoutBuilder(
@@ -28,7 +29,7 @@ class LiveItemView extends StatelessWidget {
                   children: [
                     CachedNetworkImage(
                       imageUrl: model.cover,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fill,
                       width: constraints.maxWidth,
                     ),
                     Positioned(
@@ -59,9 +60,13 @@ class LiveItemView extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              Container(
                   width: constraints.maxWidth,
-                  height: constraints.maxHeight * 0.3 - 5,
+                  height: constraints.maxHeight * 0.3,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(5.w)
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -70,7 +75,7 @@ class LiveItemView extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0),
                           child: Text(
                             model.title,
-                            style: TextStyle(fontSize: 13.sp, overflow: TextOverflow.ellipsis, color: Colors.black),
+                            style: TextStyle(fontSize: 13, overflow: TextOverflow.ellipsis, color: Colors.black),
                             maxLines: 1,
                           ),
                         ),

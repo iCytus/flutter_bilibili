@@ -5,16 +5,19 @@ class VideoPlayState extends Equatable {
   final bool isPlaying;
   final bool isReadyInput;
   final bool isDanmukaOpen;
-  const VideoPlayState({this.isShow = true, this.isPlaying = false, this.isReadyInput = false, this.isDanmukaOpen = true});
+  final bool isFollow;
+  const VideoPlayState({this.isShow = true, this.isPlaying = false, this.isReadyInput = false, this.isDanmukaOpen = true, this.isFollow = false});
   @override
-  List<Object> get props => [isShow, isPlaying, isReadyInput, isDanmukaOpen];
+  List<Object> get props => [isShow, isPlaying, isReadyInput, isDanmukaOpen, isFollow];
 
-  VideoPlayState copyWith({bool? isShow, bool? isPlaying, bool? isReadyInput, bool? isDanmukaOpen}) {
+  VideoPlayState copyWith({bool? isShow, bool? isPlaying, bool? isReadyInput, bool? isDanmukaOpen, bool? isFollow}) {
     return VideoPlayState(
         isShow: isShow ?? this.isShow,
         isPlaying: isPlaying ?? this.isPlaying,
         isReadyInput: isReadyInput ?? this.isReadyInput,
-        isDanmukaOpen: isDanmukaOpen ?? this.isDanmukaOpen);
+        isDanmukaOpen: isDanmukaOpen ?? this.isDanmukaOpen,
+        isFollow: isFollow ?? this.isFollow
+    );
   }
 }
 
@@ -23,12 +26,12 @@ class VideoPlayInitial extends VideoPlayState {}
 
 // 完成初始化
 class VideoPlayInitComplete extends VideoPlayState {
-  const VideoPlayInitComplete({super.isShow, super.isPlaying, super.isReadyInput, super.isDanmukaOpen});
+  const VideoPlayInitComplete({super.isShow, super.isPlaying, super.isReadyInput, super.isDanmukaOpen, super.isFollow});
 }
 
 // 视频处于暂停状态，此时可以滑动过程中可以收起播放器
 class VideoPlayPause extends VideoPlayState {
-  const VideoPlayPause({super.isShow, super.isPlaying, super.isReadyInput, super.isDanmukaOpen});
+  const VideoPlayPause({super.isShow, super.isPlaying, super.isReadyInput, super.isDanmukaOpen, super.isFollow});
 }
 
 // 视频加载失败 / 断网

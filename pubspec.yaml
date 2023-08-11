@@ -37,6 +37,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  auto_size_text: ^3.0.0
   bloc: ^8.1.2
   cached_network_image: ^3.2.3  # 网络图像缓存
   chewie: ^1.7.0  # 视频播放器
@@ -135,10 +136,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-  fonts:
-    - family: Alibaba
-      fonts:
-        #- asset: assets/fonts/Alibaba-PuHuiTi-Bold.ttf
-        - asset: assets/fonts/Alibaba-PuHuiTi-Regular.ttf
+#  fonts:
+#    - family: Alibaba
+#      fonts:
+#        - asset: assets/fonts/Alibaba-PuHuiTi-Regular.ttf
 flutter_intl:
   enabled: true

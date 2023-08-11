@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'custom_data_model.dart';
+
 HotDataModel hotDataModelFromJson(String str) => HotDataModel.fromJson(json.decode(str));
 
 String hotDataModelToJson(HotDataModel data) => json.encode(data.toJson());
@@ -153,30 +155,6 @@ class Dimension {
     "width": width,
     "height": height,
     "rotate": rotate,
-  };
-}
-
-class Owner {
-  int mid;
-  String name;
-  String face;
-
-  Owner({
-    required this.mid,
-    required this.name,
-    required this.face,
-  });
-
-  factory Owner.fromJson(Map<String, dynamic> json) => Owner(
-    mid: json["mid"],
-    name: json["name"],
-    face: json["face"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "mid": mid,
-    "name": name,
-    "face": face,
   };
 }
 
