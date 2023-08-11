@@ -1,8 +1,7 @@
-
 // 将过万观看数转化格式
 String viewCount(int view) {
   if (view >= 10000) {
-    return "${(view/10000).toStringAsFixed(1)}万";
+    return "${(view / 10000).toStringAsFixed(1)}万";
   } else {
     return "$view";
   }
@@ -36,11 +35,17 @@ String timeAgo2Str(int timestamp) {
     return "昨天 ${formatTime(uploadTime.hour)}: ${formatTime(uploadTime.minute)}";
   }
 
-  if (d >= 2 && d < 4 ) {
+  if (d >= 2 && d < 4) {
     return "$d天前";
   }
   if (d >= 4) {
     return "${uploadTime.month}月${uploadTime.day}日";
   }
   return "";
+}
+
+// 转化为 年月日时分
+String formatStrTime(int timestamp) {
+  var uploadTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  return "${uploadTime.year}年${formatTime(uploadTime.month)}月${formatTime(uploadTime.day)}日 ${formatTime(uploadTime.hour)}:${formatTime(uploadTime.minute)}";
 }

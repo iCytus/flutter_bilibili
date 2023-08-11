@@ -31,15 +31,15 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
       print("isDanmukaOpen: ${state.isDanmukaOpen}");
       if (state is VideoPlayInitComplete) {
         emit(VideoPlayInitComplete(
-            isPlaying: true,
+            isPlaying: state.isPlaying,
             isFollow: new_follow_status,
             isReadyInput: state.isReadyInput,
             isShow: false,
             isDanmukaOpen: state.isDanmukaOpen));
       }
       if (state is VideoPlayPause) {
-        emit(VideoPlayInitComplete(
-            isPlaying: false,
+        emit(VideoPlayPause(
+            isPlaying: state.isPlaying,
             isFollow: new_follow_status,
             isReadyInput: state.isReadyInput,
             isShow: false,
@@ -68,7 +68,7 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
       if (state is VideoPlayInitComplete) {
         //print("bloc-state-1: $state");
         emit(VideoPlayInitComplete(
-            isPlaying: true,
+            isPlaying: state.isPlaying,
             isReadyInput: event.isReadyInput,
             isShow: false,
             isDanmukaOpen: state.isDanmukaOpen,
@@ -76,7 +76,7 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
       } else if (state is VideoPlayPause) {
         //print("bloc-state-2: $state");
         emit(VideoPlayPause(
-            isPlaying: false,
+            isPlaying: state.isPlaying,
             isReadyInput: event.isReadyInput,
             isShow: false,
             isDanmukaOpen: state.isDanmukaOpen,

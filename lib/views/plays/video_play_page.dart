@@ -13,6 +13,7 @@ import '../../blocs/video_play/video_play_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../models/custom_data_model.dart';
 import '../../models/videoItem_data_model.dart';
+import '../../utils/change_Str_utils.dart';
 import 'video_shimmer_page.dart';
 
 class VideoPlayPage extends StatefulWidget {
@@ -35,11 +36,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
 
   late Owner owner;
 
+  late double topStatusHeight;
+
   // 存在两组 返回和更多按钮，一个是视频播放控件里，一个是appbar
   bool isShowAppBarBtns = false; // 是否显示 返回和更多两个按钮
   // 视频播放的时候只有评论和其他可以滚动，暂停后才可以全屏一起滚动
   bool isPaused = false;
-
+  double imageFontSize = 10.sp;
   @override
   void initState() {
     // TODO: implement initState
@@ -74,6 +77,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    topStatusHeight = MediaQuery.of(context).padding.top;
     return BlocBuilder<VideoPlayBloc, VideoPlayState>(
       buildWhen: (prev, state) {
         print("prev.runtimeType：${prev.runtimeType} - state.runtimeType: ${state.runtimeType}");
@@ -85,26 +89,27 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
           return const VideoShimmerPage();
         } else {
           print("state-1: $state - isPlaying: ${state.isPlaying}");
-          return SafeArea(
-            bottom: false,
-            child: DefaultTabController(
-              length: 2,
-              initialIndex: 0,
-              child: Scaffold(
-                body: NestedScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _scrollController,
-                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                    return [
-                      _buildVideoArea(),
-                      _buildTabListView(),
-                    ];
-                  },
-                  body: TabBarView(
-                    children: [
-                      _buildSnapshotView(),
-                      Container(
-                        color: Colors.pink,
+          return DefaultTabController(
+            length: 2,
+            initialIndex: 0,
+            child: Scaffold(
+              body: NestedScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _scrollController,
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    _buildVideoArea(),
+                    _buildTabListView(),
+                  ];
+                },
+                body: TabBarView(
+                  children: [
+                    _buildSnapshotView(),
+                    Container(
+                      color: Colors.pink,
+                      child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
                         child: ListView.builder(
                             shrinkWrap: true,
                             itemCount: 30,
@@ -114,9 +119,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                                 title: Text("index - $index"),
                               );
                             }),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -136,12 +141,9 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
         snap: false,
         elevation: 0,
         systemOverlayStyle: const SystemUiOverlayStyle(
-          systemNavigationBarColor: Color(0xFF000000),
-          systemNavigationBarDividerColor: null,
-          statusBarColor: null,
-          systemNavigationBarIconBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
+          statusBarColor: Colors.black,
         ),
         leading: isShowAppBarBtns
             ? IconButton(
@@ -180,7 +182,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
           background: Container(
             padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
             color: Colors.transparent,
-            //height: 1.sw * 9 / 16,
+            height: 1.sw * 9 / 16 + MediaQuery.of(context).padding.top,
             width: 1.sw,
             child: GestureDetector(
               onDoubleTap: () {
@@ -225,11 +227,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
         ],
         stretch: false,
         centerTitle: true,
-        primary: true,
+        primary: false,
         backgroundColor: const Color(0xffFB7299),
+        toolbarHeight: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(-14.w),
+          preferredSize: Size.fromHeight(38.w),
           child: Container(
+            height: 38.w,
             color: Theme.of(context).primaryColor,
             padding: EdgeInsets.only(left: 34.w, right: 12.w),
             width: 1.sw,
@@ -257,7 +261,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
       tabs: ["简介", "评论"]
           .map((e) => Tab(
                 text: e,
-                height: 32.w,
+                height: 36.w,
               ))
           .toList(),
       indicator: TabBarGradientIndicator(
@@ -271,82 +275,131 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
 
   // tabview: 简介
   Widget _buildSnapshotView() {
-    return ListView(
-      children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 10.w, left: 14.w, right: 14.w),
-          height: 140.w,
-          width: 1.sw,
-          color: Colors.blue,
-          child: Column(
-            children: [
-              ListTile(
-                title: Text(owner.name),
-                subtitle: Text(owner.name),
-                leading: widget.model1 != null || widget.model2 != null
-                    ? GFAvatar(
-                        backgroundImage: CachedNetworkImageProvider(owner.face, maxWidth: 22.w.toInt(), maxHeight: 22.w.toInt()),
-                        size: 22.w,
-                      )
-                    : Assets.images.home.loginHomepage.image(width: 28.w, height: 28.w),
-                trailing: BlocBuilder<VideoPlayBloc, VideoPlayState>(
-                  buildWhen: (previous, current) {
-                    return previous.isFollow != current.isFollow;
-                  },
-                  builder: (context, state) {
-
-                    return state.isFollow
-                        ? GFButton(
-                            icon: Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 15.w,
-                            ),
-                            onPressed: () {
-                              context
-                                  .read<VideoPlayBloc>()
-                                  .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, false));
-                            },
-                            text: "已关注",
-                            color: Colors.white38,
-                            shape: GFButtonShape.pills,
-                            size: GFSize.SMALL,
-                          )
-                        : GFButton(
-                            icon: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 15.w,
-                            ),
-                            onPressed: () {
-                              context
-                                  .read<VideoPlayBloc>()
-                                  .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, true));
-                            },
-                            text: "关注",
-                            color: const Color.fromRGBO(251, 114, 153, 1),
-                            shape: GFButtonShape.pills,
-                            size: GFSize.SMALL,
-                          );
-                  },
+    return MediaQuery.removePadding(
+      removeTop: true,
+      context: context,
+      child: ListView(
+        children: [
+          Container(
+            padding: EdgeInsets.only(bottom: 10.w, left: 14.w, right: 14.w),
+            height: 140.w,
+            width: 1.sw,
+            color: Colors.blue,
+            child: Column(
+              children: [
+                ListTile(
+                  title: Transform(transform: Matrix4.translationValues(-10, 0, 0), child: Text(owner.name)),
+                  subtitle: Transform(transform: Matrix4.translationValues(-10, 0, 0), child: Text(owner.name)),
+                  leading: widget.model1 != null || widget.model2 != null
+                      ? GFAvatar(
+                          backgroundImage: CachedNetworkImageProvider(owner.face, maxWidth: 22.w.toInt(), maxHeight: 22.w.toInt()),
+                          size: 22.w,
+                        )
+                      : Assets.images.home.loginHomepage.image(width: 28.w, height: 28.w),
+                  trailing: BlocBuilder<VideoPlayBloc, VideoPlayState>(
+                    buildWhen: (previous, current) {
+                      return previous.isFollow != current.isFollow;
+                    },
+                    builder: (context, state) {
+                      return state.isFollow
+                          ? GFButton(
+                              icon: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 15.w,
+                              ),
+                              onPressed: () {
+                                context.read<VideoPlayBloc>().add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, false));
+                              },
+                              text: "已关注",
+                              color: Colors.white38,
+                              shape: GFButtonShape.pills,
+                              size: GFSize.SMALL,
+                            )
+                          : GFButton(
+                              icon: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 15.w,
+                              ),
+                              onPressed: () {
+                                context.read<VideoPlayBloc>().add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, true));
+                              },
+                              text: "关注",
+                              color: const Color.fromRGBO(251, 114, 153, 1),
+                              shape: GFButtonShape.pills,
+                              size: GFSize.SMALL,
+                            );
+                    },
+                  ),
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
                 ),
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-              ),
-
-            ],
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4.w),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.model1?.title ?? widget.model2?.title ?? "",
+                              style: TextStyle(fontSize: 19.sp, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
+                              maxLines: 1,
+                            ),
+                          ),
+                          Icon(Icons.keyboard_arrow_down_outlined, size: 20.w, color: Colors.grey,)
+                          
+                        ],
+                      ),
+                      SizedBox(height: 3.w,),
+                      Row(
+                        children: [
+                          Assets.images.home.playRectangle.image(width: 15.w, height: 11.w, color: Colors.grey),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            viewCount(widget.model1?.stat.view ?? widget.model2?.stat.view ?? 0),
+                            style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                          ),
+                          SizedBox(
+                            width: 13.w,
+                          ),
+                          Assets.images.home.danmu.image(width: 15.w, height: 11.w, color: Colors.grey),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            viewCount(widget.model1?.stat.danmaku ?? widget.model2?.stat.danmaku ?? 0),
+                            style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                          ),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            formatStrTime(widget.model1?.pubdate ?? widget.model2?.pubdate ?? 0),
+                            style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text("index - $index"),
-              );
-            }),
-      ],
+          ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 20,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text("index - $index"),
+                );
+              }),
+        ],
+      ),
     );
   }
 
@@ -382,7 +435,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                                 child: Center(
                                   child: Text(
                                     state.isReadyInput ? "弹幕输入中" : "点我发弹幕",
-                                    style: TextStyle(fontSize: 12.sp),
+                                    style: TextStyle(fontSize: 12),
                                   ),
                                 ),
                               ),

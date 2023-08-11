@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TestPage extends StatefulWidget {
@@ -9,73 +10,73 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<double> animation;
-  late Animation<double> _width;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
-    animation = Tween(begin: 50.0, end: 200.0).animate(controller);
-
-    _width = Tween<double>(begin: 120.w,end: 40.w).animate(CurvedAnimation(
-      parent: controller,
-      curve: const Interval(0.0, 0.2,curve: Curves.ease),
-    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            TextButton(onPressed: () {}, child: Text("动画按钮")),
-            Container(
-              width: 1.sw,
-              height: 60.w,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 40.w,
-                  ),
-                  Container(
-                    width: 100.w,
-                    color: Colors.orange,
-                    height: 40.w,
-                  ),
-                  Expanded(child: SizedBox()),
-                  AnimatedBuilder(
-                      animation: animation,
-                      builder: (context, Widget? child) {
-                        return GestureDetector(
-                          onTap: () {
-                            print("controller-status: ${controller.status}");
-                            if (controller.status == AnimationStatus.completed) {
-                              controller.reverse();
-                            } else if (controller.status == AnimationStatus.dismissed) {
-                              controller.forward();
-                            } else if (controller.status == AnimationStatus.forward) {
-                              controller.forward();
-                            }
-                          },
-                          child: Container(
-                            height: 30.w,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.w), color: Colors.grey),
-                            width: _width.value,
-                          ),
-                        );
-                      }),
-                  SizedBox(
-                    width: 20.w,
-                  ),
-                ],
+    return Scaffold(
+      body: NestedScrollView(headerSliverBuilder: (context, ins) {
+        return [
+          SliverAppBar(
+            //当此值为true时 SliverAppBar 会固定在页面顶部
+            //当此值为fase时 SliverAppBar 会随着滑动向上滑动
+            systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarColor: Colors.orange
+            ),
+            pinned: true,
+            //滚动是是否拉伸图片
+            stretch: true,
+            //展开区域的高度
+            expandedHeight: 500,
+            //当snap配置为true时，向下滑动页面，SliverAppBar（以及其中配置的flexibleSpace内容）会立即显示出来，
+            //反之当snap配置为false时，向下滑动时，只有当ListView的数据滑动到顶部时，SliverAppBar才会下拉显示出来。
+            snap: false,
+            //阴影
+            elevation: 0,
+            //背景颜色
+            backgroundColor: Colors.white,
+            //App bar 的亮度，有白色和黑色两种主题，默认值为 ThemeData.primaryColorBrightness
+            brightness: Brightness.light,
+            //在标题左侧显示的一个控件，在首页通常显示应用的 logo；在其他界面通常显示为返回按钮
+            leading: IconButton(
+                icon: Icon(Icons.abc),
+                onPressed: () {
+                  //TODO: 返回事件处理
+                }),
+            //一个显示在 AppBar 下方的控件，高度和 AppBar 高度一样， // 可以实现一些特殊的效果，该属性通常在 SliverAppBar 中使用
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                '长津湖',
+                style: TextStyle(color: Color(0xFF333333), fontWeight: FontWeight.w700, fontSize: 17, fontFamily: 'PingFangSC-Semibold'),
               ),
-            )
-          ],
+              //标题居中
+              centerTitle: true,
+              background: Container(
+                height: 400,
+                width: ScreenUtil().screenWidth,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage('https://p0.meituan.net/movie/0e81560dc9910a6a658a82ec7a054ceb5075992.jpg@464w_644h_1e_1c'),
+                        fit: BoxFit.fill)),
+              ),
+            ),
+          )
+        ];
+      }, body: Container(
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: ListView.builder(itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 6.w),
+              child: Text("index - $index"),
+            );
+          }),
         ),
-      ),
+      )),
     );
   }
 }
