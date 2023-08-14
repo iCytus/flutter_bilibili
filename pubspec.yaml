@@ -49,8 +49,9 @@ dependencies:
   easy_refresh: ^3.3.2  # 刷新
   equatable: ^2.0.4
   extended_image: ^7.0.2  # 图片
-
+  flutter_barrage: ^0.5.4  # 弹幕墙
   flutter_bloc: ^8.1.2
+
   flutter_inappwebview: ^5.5.0+5  # webview
   flutter_sequence_animation: ^4.0.0
 

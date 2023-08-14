@@ -1,10 +1,12 @@
 import 'package:bilibili_bloc/models/hot_data_model.dart';
+import 'package:bilibili_bloc/models/video_detail_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
 import 'package:video_player/video_player.dart';
@@ -14,13 +16,14 @@ import '../../gen/assets.gen.dart';
 import '../../models/custom_data_model.dart';
 import '../../models/videoItem_data_model.dart';
 import '../../utils/change_Str_utils.dart';
+import 'similar_item_view.dart';
 import 'video_shimmer_page.dart';
 
 class VideoPlayPage extends StatefulWidget {
-  VideoItemDataModel? model1;
-  HotDataModel? model2;
+  // todo: 换成新的 videodetailmodel
+  String bvid;
 
-  VideoPlayPage({super.key, this.model1, this.model2});
+  VideoPlayPage({super.key, required this.bvid});
 
   @override
   State<VideoPlayPage> createState() => _VideoPlayPageState();
@@ -34,15 +37,16 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   late Animation<double> animation;
   late Animation<double> _width;
 
-  late Owner owner;
-
   late double topStatusHeight;
 
   // 存在两组 返回和更多按钮，一个是视频播放控件里，一个是appbar
   bool isShowAppBarBtns = false; // 是否显示 返回和更多两个按钮
   // 视频播放的时候只有评论和其他可以滚动，暂停后才可以全屏一起滚动
   bool isPaused = false;
-  double imageFontSize = 10.sp;
+  double imageFontSize = 14;
+  double coinbtnSize = 28.w;
+
+  TextStyle textBtnsStyle = TextStyle(fontSize: 14, color: Colors.grey[500]);
   @override
   void initState() {
     // TODO: implement initState
@@ -71,8 +75,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
       parent: animationController,
       curve: const Interval(0.0, 0.2, curve: Curves.ease),
     ));
-
-    owner = (widget.model1?.owner ?? widget.model2?.owner)!;
   }
 
   @override
@@ -89,43 +91,49 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
           return const VideoShimmerPage();
         } else {
           print("state-1: $state - isPlaying: ${state.isPlaying}");
-          return DefaultTabController(
-            length: 2,
-            initialIndex: 0,
-            child: Scaffold(
-              body: NestedScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _scrollController,
-                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    _buildVideoArea(),
-                    _buildTabListView(),
-                  ];
-                },
-                body: TabBarView(
-                  children: [
-                    _buildSnapshotView(),
-                    Container(
-                      color: Colors.pink,
-                      child: MediaQuery.removePadding(
-                        context: context,
-                        removeTop: true,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: 30,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text("index - $index"),
-                              );
-                            }),
-                      ),
-                    )
-                  ],
+          if (state.model != null) {
+            return DefaultTabController(
+              length: 2,
+              initialIndex: 0,
+              child: Scaffold(
+                body: NestedScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _scrollController,
+                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      _buildVideoArea(),
+                      _buildTabListView(),
+                    ];
+                  },
+                  body: TabBarView(
+                    children: [
+                      _buildSnapshotView(),
+                      Container(
+                        color: Colors.pink,
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 30,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text("index - $index"),
+                                );
+                              }),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          } else {
+            return const Center(
+              child: Text("视频不见了"),
+            );
+          }
         }
       },
     );
@@ -279,125 +287,268 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
       removeTop: true,
       context: context,
       child: ListView(
+        shrinkWrap: true,
         children: [
           Container(
             padding: EdgeInsets.only(bottom: 10.w, left: 14.w, right: 14.w),
-            height: 140.w,
+            //height: 140.w,
             width: 1.sw,
-            color: Colors.blue,
+            color: Colors.transparent,
             child: Column(
               children: [
-                ListTile(
-                  title: Transform(transform: Matrix4.translationValues(-10, 0, 0), child: Text(owner.name)),
-                  subtitle: Transform(transform: Matrix4.translationValues(-10, 0, 0), child: Text(owner.name)),
-                  leading: widget.model1 != null || widget.model2 != null
-                      ? GFAvatar(
-                          backgroundImage: CachedNetworkImageProvider(owner.face, maxWidth: 22.w.toInt(), maxHeight: 22.w.toInt()),
-                          size: 22.w,
-                        )
-                      : Assets.images.home.loginHomepage.image(width: 28.w, height: 28.w),
-                  trailing: BlocBuilder<VideoPlayBloc, VideoPlayState>(
-                    buildWhen: (previous, current) {
-                      return previous.isFollow != current.isFollow;
-                    },
-                    builder: (context, state) {
-                      return state.isFollow
-                          ? GFButton(
-                              icon: Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: 15.w,
-                              ),
-                              onPressed: () {
-                                context.read<VideoPlayBloc>().add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, false));
-                              },
-                              text: "已关注",
-                              color: Colors.white38,
-                              shape: GFButtonShape.pills,
-                              size: GFSize.SMALL,
-                            )
-                          : GFButton(
-                              icon: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 15.w,
-                              ),
-                              onPressed: () {
-                                context.read<VideoPlayBloc>().add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, true));
-                              },
-                              text: "关注",
-                              color: const Color.fromRGBO(251, 114, 153, 1),
-                              shape: GFButtonShape.pills,
-                              size: GFSize.SMALL,
-                            );
-                    },
-                  ),
-                  dense: true,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4.w),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              widget.model1?.title ?? widget.model2?.title ?? "",
-                              style: TextStyle(fontSize: 19.sp, fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis),
-                              maxLines: 1,
-                            ),
-                          ),
-                          Icon(Icons.keyboard_arrow_down_outlined, size: 20.w, color: Colors.grey,)
-                          
-                        ],
+                BlocBuilder<VideoPlayBloc, VideoPlayState>(
+                  builder: (context, state) {
+                    VideoDetailModel model = state.model!;
+                    return ListTile(
+                      title: Transform(transform: Matrix4.translationValues(-10, 0, 0), child: Text(model.owner.name)),
+                      subtitle: Transform(transform: Matrix4.translationValues(-10, 0, 0), child: Text(model.owner.name)),
+                      leading: GFAvatar(
+                        backgroundImage: CachedNetworkImageProvider(model.owner.face, maxWidth: 22.w.toInt(), maxHeight: 22.w.toInt()),
+                        size: 22.w,
                       ),
-                      SizedBox(height: 3.w,),
-                      Row(
-                        children: [
-                          Assets.images.home.playRectangle.image(width: 15.w, height: 11.w, color: Colors.grey),
-                          SizedBox(
-                            width: 3.w,
+                      trailing: BlocBuilder<VideoPlayBloc, VideoPlayState>(
+                        buildWhen: (previous, current) {
+                          return previous.isFollow != current.isFollow;
+                        },
+                        builder: (context, state) {
+                          return state.isFollow
+                              ? GFButton(
+                                  icon: Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 15.w,
+                                  ),
+                                  onPressed: () {
+                                    context
+                                        .read<VideoPlayBloc>()
+                                        .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, false));
+                                  },
+                                  text: "已关注",
+                                  color: Colors.white38,
+                                  shape: GFButtonShape.pills,
+                                  size: GFSize.SMALL,
+                                )
+                              : GFButton(
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 15.w,
+                                  ),
+                                  onPressed: () {
+                                    context
+                                        .read<VideoPlayBloc>()
+                                        .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, true));
+                                  },
+                                  text: "关注",
+                                  color: const Color.fromRGBO(251, 114, 153, 1),
+                                  shape: GFButtonShape.pills,
+                                  size: GFSize.SMALL,
+                                );
+                        },
+                      ),
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
+                    );
+                  },
+                ),
+                BlocBuilder<VideoPlayBloc, VideoPlayState>(builder: (context, state) {
+                  VideoDetailModel model = state.model!;
+                  return GestureDetector(
+                    onTap: () {
+                      context.read<VideoPlayBloc>().add(VideoMoreInfoEvent(state.isPlaying, state.isShow));
+                    },
+                    child: _buildSimpleTextInfo(model, state.isShowMoreInfo),
+                  );
+                }),
+                BlocBuilder<VideoPlayBloc, VideoPlayState>(
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Assets.images.video.liked.image(width: coinbtnSize, height: coinbtnSize),
+                              Text("${state.model!.stat.like}", style: textBtnsStyle),
+                            ],
                           ),
-                          Text(
-                            viewCount(widget.model1?.stat.view ?? widget.model2?.stat.view ?? 0),
-                            style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Assets.images.video.dislikeCustom.image(width: coinbtnSize, height: coinbtnSize),
+                              Text(
+                                "不喜欢",
+                                style: textBtnsStyle,
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            width: 13.w,
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Assets.images.video.coinCustom.image(width: coinbtnSize, height: coinbtnSize),
+                              Text("${state.model!.stat.coin}", style: textBtnsStyle),
+                            ],
                           ),
-                          Assets.images.home.danmu.image(width: 15.w, height: 11.w, color: Colors.grey),
-                          SizedBox(
-                            width: 3.w,
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              Assets.images.video.collectCustom.image(width: coinbtnSize, height: coinbtnSize),
+                              Text("${state.model!.stat.favorite}", style: textBtnsStyle),
+                            ],
                           ),
-                          Text(
-                            viewCount(widget.model1?.stat.danmaku ?? widget.model2?.stat.danmaku ?? 0),
-                            style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            children: [
+                              SvgPicture.asset(Assets.images.trends.forward, width: coinbtnSize, height: coinbtnSize),
+                              Text("${state.model!.stat.share}", style: textBtnsStyle),
+                            ],
                           ),
-                          SizedBox(
-                            width: 3.w,
-                          ),
-                          Text(
-                            formatStrTime(widget.model1?.pubdate ?? widget.model2?.pubdate ?? 0),
-                            style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                        ),
+                      ],
+                    );
+                  },
                 )
               ],
             ),
           ),
-          ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 20,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text("index - $index"),
-                );
-              }),
+          BlocBuilder<VideoPlayBloc, VideoPlayState>(
+            builder: (context, state) {
+              VideoDetailModel model = state.model!;
+              return ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: model.ugcSeason!.sections.first.episodes.length,
+                  itemBuilder: (context, index) {
+                    Episode e = model.ugcSeason!.sections.first.episodes.elementAt(index);
+                    return SimilarItemView(
+                      model: e,
+                    );
+                  });
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  // 构建视频介绍文本
+  Widget _buildSimpleTextInfo(VideoDetailModel model, bool isShowMoreInfo) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.w),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  model.title,
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold, overflow: isShowMoreInfo ? TextOverflow.fade : TextOverflow.ellipsis),
+                  maxLines: isShowMoreInfo ? null : 1,
+                ),
+              ),
+              Icon(
+                isShowMoreInfo ? Icons.keyboard_arrow_up_outlined : Icons.keyboard_arrow_down_outlined,
+                size: 20.w,
+                color: Colors.grey,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 3.w,
+          ),
+          Row(
+            children: [
+              Assets.images.home.playRectangle.image(width: 15.w, height: 11.w, color: Colors.grey),
+              SizedBox(
+                width: 3.w,
+              ),
+              Text(
+                viewCount(model.stat.view),
+                style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+              ),
+              SizedBox(
+                width: 13.w,
+              ),
+              Assets.images.home.danmu.image(width: 15.w, height: 11.w, color: Colors.grey),
+              SizedBox(
+                width: 3.w,
+              ),
+              Text(
+                viewCount(model.stat.danmaku),
+                style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+              ),
+              SizedBox(
+                width: 13.w,
+              ),
+              Text(
+                formatStrTime(model.pubdate),
+                style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+              ),
+            ],
+          ),
+          isShowMoreInfo
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          model.bvid,
+                          style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                        ),
+                        SizedBox(
+                          width: 13.w,
+                        ),
+                        Icon(Icons.not_interested, size: 15.w, color: Colors.red),
+                        SizedBox(
+                          width: 3.w,
+                        ),
+                        Text(
+                          "未经坐着授权禁止转载",
+                          style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4.w),
+                      child: Text(
+                        model.desc,
+                        style: textBtnsStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 16.w,
+                        runSpacing: 10.w,
+                        alignment: WrapAlignment.start,
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        children: ["原神", "搞笑", "手机游戏", "实况攻略", "原神UP主激励计划", "游戏实况", "原神开荒", "原神萌新", "开荒", "入坑", "萌新开荒"].map((e) {
+                          return Container(
+                            padding: EdgeInsets.symmetric(vertical: 3.w, horizontal: 6.w),
+                            decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(6.w)),
+                            child: Text(
+                              e,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    )
+                  ],
+                )
+              : Container()
         ],
       ),
     );
@@ -472,9 +623,8 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   }
 
   Future<void> _changeView() async {
-    print(widget.model1?.uri ?? widget.model2?.shortLinkV2);
     videoPlayerController = VideoPlayerController.networkUrl(
-        Uri.parse("https://assets.mixkit.co/videos/preview/mixkit-daytime-city-traffic-aerial-view-56-large.mp4"));
+        Uri.parse("https://qingx-h5-1253674864.cos.ap-guangzhou.myqcloud.com/video/2023/3/31/aa5a29573061443997e6fb7134e52513.mp4"));
     await videoPlayerController.initialize();
 
     chewieController =
@@ -482,8 +632,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
             // customControls:
             );
     Future.delayed(const Duration(seconds: 1), () {
-      context.read<VideoPlayBloc>().emit(VideoPlayInitComplete(
-          isPlaying: true, isShow: false, isReadyInput: false, isFollow: widget.model1?.isFollowed == 1, isDanmukaOpen: true));
+      context.read<VideoPlayBloc>().add(LoadVideoDetail(true, false, bvid: widget.bvid));
     });
   }
 
@@ -498,6 +647,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   void dispose() {
     videoPlayerController.dispose();
     chewieController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 }

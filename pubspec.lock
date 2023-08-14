@@ -230,6 +230,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_barrage:
+    dependency: "direct main"
+    description:
+      name: flutter_barrage
+      sha256: d47404608dc66d4a08a5224179cfb4405aefe524f915d03dee4f5fab0cca3094
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.4"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -629,6 +637,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.0.5"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.1"
   rich_readmore:
     dependency: "direct main"
     description:

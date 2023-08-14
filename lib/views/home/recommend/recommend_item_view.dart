@@ -26,7 +26,7 @@ class RecommendItemView extends StatelessWidget {
           return GestureDetector(
             onTap: () {
               print("当前model: ${model.title}");
-              context.pushNamed(RouteName.videoPage, extra: model);
+              context.pushNamed(RouteName.videoPage, extra: model.bvid);
             },
             child: Column(
               children: [

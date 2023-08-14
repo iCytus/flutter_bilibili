@@ -80,3 +80,9 @@ class DanmakuInputEvent extends VideoPlayEvent {
   final bool isReadyInput;
   DanmakuInputEvent(super.isShow, super.isPlaying, {required this.isReadyInput});
 }
+
+// 点进视频播放页页后请求视频信息
+class LoadVideoDetail extends VideoPlayEvent {
+  final String bvid;
+  LoadVideoDetail(super.isShow, super.isPlaying, {required this.bvid});
+}

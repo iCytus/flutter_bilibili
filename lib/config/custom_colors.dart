@@ -80,7 +80,7 @@ enum CustomThemeMode { system, light, dark, pink }
 class CustomThemeConfig {
   static ThemeData get biliPinkData => ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
+      scaffoldBackgroundColor: const Color.fromRGBO(245, 245, 245, 1),
       cardColor: Colors.white,
       primaryColor: const Color(0xffFB7299),
       primaryColorLight: const Color.fromRGBO(251, 114, 153, 1),
@@ -100,7 +100,7 @@ class CustomThemeConfig {
   static ThemeData get biliWhiteData => ThemeData(
       brightness: Brightness.light,
 
-      scaffoldBackgroundColor: const Color.fromRGBO(235, 235, 235, 1),
+      scaffoldBackgroundColor: const Color.fromRGBO(245, 245, 245, 1),
       cardColor: Colors.white,
       primaryColor: const Color(0xffFFFFFf),
       primaryColorLight: const Color.fromRGBO(255, 255, 255, 1),

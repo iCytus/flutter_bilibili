@@ -77,12 +77,7 @@ final GoRouter routers = GoRouter(initialLocation: "/", routes: <RouteBase>[
         }),
         GoRoute(path: RouteName.videoPage, name: RouteName.videoPage, builder: (context, state) {
           var v = state.extra;
-          if (v is VideoItemDataModel) {
-            return VideoPlayPage(model1: v,);
-          } else if (v is HotDataModel) {
-            return VideoPlayPage(model2: v,);
-          }
-          return VideoPlayPage();
+          return VideoPlayPage(bvid: v as String,);
         }),
       ])
 ], observers: [
