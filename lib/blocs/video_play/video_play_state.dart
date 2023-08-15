@@ -16,6 +16,10 @@ class VideoPlayState extends Equatable {
 
   final bool isShowMoreInfo;
 
+  final VideoPlayerController? videoPlayerController;
+  final ChewieController? chewieController;
+  final BarrageWallController? barrageWallController;
+
   const VideoPlayState({
     this.isShow = true,
     this.isPlaying = false,
@@ -29,9 +33,13 @@ class VideoPlayState extends Equatable {
     this.isForward = false,
     this.model,
     this.isShowMoreInfo = false,
+    this.videoPlayerController,
+    this.chewieController,
+    this.barrageWallController,
   });
   @override
-  List<Object> get props => [isShow, isPlaying, isReadyInput, isDanmukaOpen, isFollow, isLiked, isDisliked, isCoin, isCollected, isForward, isShowMoreInfo];
+  List<Object> get props =>
+      [isShow, isPlaying, isReadyInput, isDanmukaOpen, isFollow, isLiked, isDisliked, isCoin, isCollected, isForward, isShowMoreInfo];
 
   VideoPlayState copyWith({
     bool? isShow,
@@ -65,7 +73,9 @@ class VideoPlayState extends Equatable {
 }
 
 // 初始化视频播放页时 shimmer 效果
-class VideoPlayInitial extends VideoPlayState {}
+class VideoPlayInitial extends VideoPlayState {
+
+}
 
 // // 点进视频页加载视频
 // class VideoPlayLoad extends VideoPlayState {
@@ -75,38 +85,44 @@ class VideoPlayInitial extends VideoPlayState {}
 
 // 完成初始化
 class VideoPlayInitComplete extends VideoPlayState {
-  const VideoPlayInitComplete(
-      {super.isShow,
-      super.isPlaying,
-      super.isReadyInput,
-      super.isDanmukaOpen,
-      super.isFollow,
-      super.isLiked,
-      super.isDisliked,
-      super.isCoin,
-      super.isCollected,
-      super.isForward,
-      super.model,
-      super.isShowMoreInfo,
-      });
+  const VideoPlayInitComplete({
+    super.isShow,
+    super.isPlaying,
+    super.isReadyInput,
+    super.isDanmukaOpen,
+    super.isFollow,
+    super.isLiked,
+    super.isDisliked,
+    super.isCoin,
+    super.isCollected,
+    super.isForward,
+    super.model,
+    super.isShowMoreInfo,
+    super.chewieController,
+    super.videoPlayerController,
+    super.barrageWallController,
+  });
 }
 
 // 视频处于暂停状态，此时可以滑动过程中可以收起播放器
 class VideoPlayPause extends VideoPlayState {
-  const VideoPlayPause(
-      {super.isShow,
-      super.isPlaying,
-      super.isReadyInput,
-      super.isDanmukaOpen,
-      super.isFollow,
-      super.isLiked,
-      super.isDisliked,
-      super.isCoin,
-      super.isCollected,
-      super.isForward,
-      super.model,
-      super.isShowMoreInfo,
-      });
+  const VideoPlayPause({
+    super.isShow,
+    super.isPlaying,
+    super.isReadyInput,
+    super.isDanmukaOpen,
+    super.isFollow,
+    super.isLiked,
+    super.isDisliked,
+    super.isCoin,
+    super.isCollected,
+    super.isForward,
+    super.model,
+    super.isShowMoreInfo,
+    super.chewieController,
+    super.videoPlayerController,
+    super.barrageWallController,
+  });
 }
 
 // 视频加载失败 / 断网

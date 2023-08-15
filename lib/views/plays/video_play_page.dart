@@ -31,8 +31,8 @@ class VideoPlayPage extends StatefulWidget {
 
 class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  late VideoPlayerController videoPlayerController;
-  late ChewieController chewieController;
+  // late VideoPlayerController videoPlayerController;
+  // late ChewieController chewieController;
   late AnimationController animationController;
   late Animation<double> animation;
   late Animation<double> _width;
@@ -82,15 +82,15 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
     topStatusHeight = MediaQuery.of(context).padding.top;
     return BlocBuilder<VideoPlayBloc, VideoPlayState>(
       buildWhen: (prev, state) {
-        print("prev.runtimeType：${prev.runtimeType} - state.runtimeType: ${state.runtimeType}");
+        //print("prev.runtimeType：${prev.runtimeType} - state.runtimeType: ${state.runtimeType}");
         return prev.runtimeType != state.runtimeType || state.isReadyInput != prev.isReadyInput;
       },
       builder: (context, state) {
         if (state is VideoPlayInitial) {
-          print("state-0: $state - isPlaying: ${state.isPlaying}");
+          //print("state-0: $state - isPlaying: ${state.isPlaying}");
           return const VideoShimmerPage();
         } else {
-          print("state-1: $state - isPlaying: ${state.isPlaying}");
+          //print("state-1: $state - isPlaying: ${state.isPlaying}");
           if (state.model != null) {
             return DefaultTabController(
               length: 2,
@@ -142,7 +142,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   // 构建视频播放区
   Widget _buildVideoArea() {
     return BlocBuilder<VideoPlayBloc, VideoPlayState>(builder: (context, state) {
-      print("_buildVideoArea-state: $state");
+      //print("_buildVideoArea-state: $state");
       return SliverAppBar(
         floating: false,
         pinned: true,
@@ -196,13 +196,13 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
               onDoubleTap: () {
                 // 双击暂停或播放
                 print("双击暂停或播放: ${state.isPlaying}");
-                isPaused = videoPlayerController.value.isPlaying;
+                isPaused = state.videoPlayerController!.value.isPlaying;
                 context
                     .read<VideoPlayBloc>()
-                    .add(VideoPlayOrPauseEvent(true, videoPlayerController.value.isPlaying, videoPlayerController));
+                    .add(VideoPlayOrPauseEvent(true, state.videoPlayerController!.value.isPlaying, state.videoPlayerController));
               },
               child: Chewie(
-                controller: chewieController,
+                controller: state.chewieController!,
               ),
             ),
           ),
@@ -215,7 +215,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   // 构建tabbar展开收起区
   Widget _buildTabListView() {
     return BlocBuilder<VideoPlayBloc, VideoPlayState>(builder: (context, state) {
-      print("_buidlTabListView-state: $state");
+      //print("_buidlTabListView-state: $state");
       return SliverAppBar(
         floating: false,
         pinned: true,
@@ -262,7 +262,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   Widget _buildTabBarView() {
     return TabBar(
       onTap: (index) {
-        print("index：$index");
+        //print("index：$index");
       },
       padding: EdgeInsets.zero,
       enableFeedback: true,
@@ -321,7 +321,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                                   onPressed: () {
                                     context
                                         .read<VideoPlayBloc>()
-                                        .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, false));
+                                        .add(FollowAuthorEvent(false, state.videoPlayerController!.value.isPlaying, false));
                                   },
                                   text: "已关注",
                                   color: Colors.white38,
@@ -337,7 +337,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                                   onPressed: () {
                                     context
                                         .read<VideoPlayBloc>()
-                                        .add(FollowAuthorEvent(false, videoPlayerController.value.isPlaying, true));
+                                        .add(FollowAuthorEvent(false, state.videoPlayerController!.value.isPlaying, true));
                                   },
                                   text: "关注",
                                   color: const Color.fromRGBO(251, 114, 153, 1),
@@ -575,7 +575,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                               onTap: () {
                                 // 这个点击时间是弹出键盘输入弹幕
                                 context.read<VideoPlayBloc>().add(
-                                    DanmakuInputEvent(false, videoPlayerController.value.isPlaying, isReadyInput: !state.isReadyInput));
+                                    DanmakuInputEvent(false, state.videoPlayerController!.value.isPlaying, isReadyInput: !state.isReadyInput));
                               },
                               child: Container(
                                 width: 80.w,
@@ -596,7 +596,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                         onTap: () {
                           // 从当前按钮的状态判断是 打开还是关闭 弹幕
                           bool isDanmukaOpen = animationController.status == AnimationStatus.completed ? true : false;
-                          context.read<VideoPlayBloc>().add(DanmakuVideoEvent(false, videoPlayerController.value.isPlaying,
+                          context.read<VideoPlayBloc>().add(DanmakuVideoEvent(false, state.videoPlayerController!.value.isPlaying,
                               isDanmukaOpen: isDanmukaOpen, animationController: animationController));
                         },
                         child: Container(
@@ -623,21 +623,23 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   }
 
   Future<void> _changeView() async {
-    videoPlayerController = VideoPlayerController.networkUrl(
-        Uri.parse("https://qingx-h5-1253674864.cos.ap-guangzhou.myqcloud.com/video/2023/3/31/aa5a29573061443997e6fb7134e52513.mp4"));
-    await videoPlayerController.initialize();
-
-    chewieController =
-        ChewieController(videoPlayerController: videoPlayerController, autoPlay: true, looping: false, fullScreenByDefault: false
-            // customControls:
-            );
+    // videoPlayerController = VideoPlayerController.networkUrl(
+    //     Uri.parse("https://qingx-h5-1253674864.cos.ap-guangzhou.myqcloud.com/video/2023/3/31/aa5a29573061443997e6fb7134e52513.mp4"));
+    // await videoPlayerController.initialize();
+    //
+    // chewieController =
+    //     ChewieController(videoPlayerController: videoPlayerController, autoPlay: true, looping: false, fullScreenByDefault: false
+    //         // customControls:
+    //         );
     Future.delayed(const Duration(seconds: 1), () {
-      context.read<VideoPlayBloc>().add(LoadVideoDetail(true, false, bvid: widget.bvid));
+      context.read<VideoPlayBloc>().add(LoadVideoDetail(true, false, bvid: widget.bvid, ));
     });
   }
 
   @override
   void deactivate() {
+    // 播放器也要释放
+    context.read<VideoPlayBloc>().add(ReleaseVideoPlayer(false, false));
     // 返回上一层，恢复未初始化的状态
     context.read<VideoPlayBloc>().emit(VideoPlayInitial());
     super.deactivate();
@@ -645,8 +647,8 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
-    chewieController.dispose();
+    // videoPlayerController.dispose();
+    // chewieController.dispose();
     _scrollController.dispose();
     super.dispose();
   }

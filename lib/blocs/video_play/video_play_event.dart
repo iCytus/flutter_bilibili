@@ -84,5 +84,10 @@ class DanmakuInputEvent extends VideoPlayEvent {
 // 点进视频播放页页后请求视频信息
 class LoadVideoDetail extends VideoPlayEvent {
   final String bvid;
-  LoadVideoDetail(super.isShow, super.isPlaying, {required this.bvid});
+  LoadVideoDetail(super.isShow, super.isPlaying, {required this.bvid,});
+}
+
+// 释放播放器资源
+class ReleaseVideoPlayer extends VideoPlayEvent {
+  ReleaseVideoPlayer(super.isShow, super.isPlaying);
 }

@@ -78,6 +78,7 @@ dependencies:
   wechat_assets_picker: ^8.4.3
 
 dev_dependencies:
+  test: any
   flutter_test:
     sdk: flutter
 
@@ -111,6 +112,8 @@ flutter:
     - assets/images/trends/
     - assets/images/custom/
     - assets/images/video/
+    - assets/videos/
+    - assets/videos/video_720p_n.ass
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
