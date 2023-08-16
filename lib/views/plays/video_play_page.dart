@@ -31,8 +31,6 @@ class VideoPlayPage extends StatefulWidget {
 
 class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  // late VideoPlayerController videoPlayerController;
-  // late ChewieController chewieController;
   late AnimationController animationController;
   late Animation<double> animation;
   late Animation<double> _width;
@@ -142,7 +140,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   // 构建视频播放区
   Widget _buildVideoArea() {
     return BlocBuilder<VideoPlayBloc, VideoPlayState>(builder: (context, state) {
-      //print("_buildVideoArea-state: $state");
       return SliverAppBar(
         floating: false,
         pinned: true,
@@ -157,7 +154,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
             ? IconButton(
                 icon: const Icon(
                   Icons.arrow_back,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
                 onPressed: () {},
               )
@@ -167,7 +164,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
               ? IconButton(
                   icon: const Icon(
                     Icons.more_vert_outlined,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                   onPressed: () {},
                 )
@@ -201,8 +198,30 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                     .read<VideoPlayBloc>()
                     .add(VideoPlayOrPauseEvent(true, state.videoPlayerController!.value.isPlaying, state.videoPlayerController));
               },
-              child: Chewie(
-                controller: state.chewieController!,
+              child: Stack(
+                children: [
+                  Chewie(
+                    controller: state.chewieController!,
+                  ),
+                  Container(
+                    width: 1.sw,
+                    height: double.infinity,
+                    color: const Color.fromRGBO(255, 255, 255, 0.5),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 1.sw,
+                          height: kToolbarHeight,
+                          child: Row(children: [
+                            IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.orange,)),
+                            Expanded(child: SizedBox()),
+                            IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_sharp, color: Colors.red,))
+                          ],),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -626,11 +645,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
     // videoPlayerController = VideoPlayerController.networkUrl(
     //     Uri.parse("https://qingx-h5-1253674864.cos.ap-guangzhou.myqcloud.com/video/2023/3/31/aa5a29573061443997e6fb7134e52513.mp4"));
     // await videoPlayerController.initialize();
-    //
-    // chewieController =
-    //     ChewieController(videoPlayerController: videoPlayerController, autoPlay: true, looping: false, fullScreenByDefault: false
-    //         // customControls:
-    //         );
     Future.delayed(const Duration(seconds: 1), () {
       context.read<VideoPlayBloc>().add(LoadVideoDetail(true, false, bvid: widget.bvid, ));
     });
@@ -647,8 +661,6 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
 
   @override
   void dispose() {
-    // videoPlayerController.dispose();
-    // chewieController.dispose();
     _scrollController.dispose();
     super.dispose();
   }

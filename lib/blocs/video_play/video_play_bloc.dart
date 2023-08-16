@@ -8,6 +8,7 @@ import 'package:flutter_barrage/flutter_barrage.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../../config/test_data.dart';
+import '../../widgets/video_controls_style.dart';
 
 part 'video_play_event.dart';
 part 'video_play_state.dart';
@@ -233,7 +234,7 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
       barrageWallController = BarrageWallController(timelineNotifier: timelineNotifier);
       chewieController = ChewieController(
         videoPlayerController: videoPlayerController, autoPlay: true, looping: false, fullScreenByDefault: false,
-        // customControls:
+        customControls: const SizedBox(),
         overlay: BarrageWall(
           debug: false,
           // do not send bullets to the safe area
