@@ -23,7 +23,7 @@ class VideoShimmerPage extends StatelessWidget {
               height: 30.w,
               width: double.infinity,
               child: Row(
-                children: [SizedBox(width: kToolbarHeight), Text("简介"), Expanded(child: SizedBox()), Text("点我发送弹幕")],
+                children: [SizedBox(width: kToolbarHeight), Text("简介"), Spacer(), Text("点我发送弹幕")],
               ),
             ),
             GFShimmer(
@@ -63,7 +63,7 @@ class VideoShimmerPage extends StatelessWidget {
                                   ))
                             ],
                           ),
-                          Expanded(child: SizedBox()),
+                          Spacer(),
                           Container(
                             width: 60.w,
                             height: 28.w,
@@ -151,7 +151,7 @@ class VideoShimmerPage extends StatelessWidget {
                                   height: 18.w,
                                   color: Colors.grey[350],
                                 ),
-                                const Expanded(child: SizedBox()),
+                                const Spacer(),
                                 Container(
                                   width: MediaQuery.of(context).size.width * 0.5,
                                   height: 16.w,
@@ -191,7 +191,7 @@ class VideoShimmerPage extends StatelessWidget {
                                   height: 18.w,
                                   color: Colors.grey[350],
                                 ),
-                                const Expanded(child: SizedBox()),
+                                const Spacer(),
                                 Container(
                                   width: MediaQuery.of(context).size.width * 0.5,
                                   height: 16.w,

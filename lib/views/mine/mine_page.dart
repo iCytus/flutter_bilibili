@@ -1,6 +1,3 @@
-import 'dart:collection';
-import 'dart:convert';
-
 import 'package:bilibili_bloc/blocs/login/login_bloc.dart';
 import 'package:bilibili_bloc/blocs/theme/custom_theme_cubit.dart';
 import 'package:bilibili_bloc/config/custom_colors.dart';
@@ -70,8 +67,8 @@ class _MinePageState extends State<MinePage> {
                     padding: EdgeInsets.zero,
                     color: Colors.transparent,
                     onPressed: () async {
-                      String? result = await context.pushNamed(RouteName.scanPage);
-                      print("扫码结果: $result");
+                      //String? result = await context.pushNamed(RouteName.scanPage);
+                      //print("扫码结果: $result");
                     },
                     child: Assets.images.mine.qrscan.image(width: 22.w, height: 22.w, color: Theme.of(context).iconTheme.color)),
               ),
@@ -177,13 +174,13 @@ class _MinePageState extends State<MinePage> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    const Expanded(child: SizedBox()),
-                                    state.user != null || state is LoginComplete ? Text("${state.user!.trendsCount}") : Text("-"),
+                                    const Spacer(),
+                                    state.user != null || state is LoginComplete ? Text("${state.user!.trendsCount}") : const Text("-"),
                                     SizedBox(
                                       height: 3.w,
                                     ),
                                     Text(S.current.Posts),
-                                    const Expanded(child: SizedBox())
+                                    const Spacer()
                                   ],
                                 ),
                               ),
@@ -195,13 +192,13 @@ class _MinePageState extends State<MinePage> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    const Expanded(child: SizedBox()),
+                                    const Spacer(),
                                     state.user != null || state is LoginComplete ? Text("${state.user!.attentionsCount}") : const Text("-"),
                                     SizedBox(
                                       height: 3.w,
                                     ),
                                     Text(S.current.following),
-                                    const Expanded(child: SizedBox())
+                                    const Spacer()
                                   ],
                                 ),
                               ),
@@ -213,13 +210,13 @@ class _MinePageState extends State<MinePage> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    const Expanded(child: SizedBox()),
-                                    state.user != null || state is LoginComplete ? Text("${state.user!.fansCount}") : Text("-"),
+                                    const Spacer(),
+                                    state.user != null || state is LoginComplete ? Text("${state.user!.fansCount}") : const Text("-"),
                                     SizedBox(
                                       height: 3.w,
                                     ),
                                     Text(S.current.followers),
-                                    const Expanded(child: SizedBox())
+                                    const Spacer()
                                   ],
                                 ),
                               ),
@@ -245,7 +242,7 @@ class _MinePageState extends State<MinePage> {
                                 width: 80.w,
                                 child: Row(
                                   children: const [
-                                    Expanded(child: SizedBox()),
+                                    Spacer(),
                                     Text("立即开通", style: TextStyle(color: Colors.pinkAccent)),
                                     Icon(
                                       Icons.keyboard_arrow_right,
@@ -267,7 +264,7 @@ class _MinePageState extends State<MinePage> {
                 child: EasyRefresh.builder(
                     controller: _controller,
                     onRefresh: () async {
-                      print("下拉刷新");
+                      //print("下拉刷新");
                       await Future.delayed(const Duration(seconds: 2));
                       _controller.finishRefresh();
                       _controller.resetFooter();
@@ -286,14 +283,13 @@ class _MinePageState extends State<MinePage> {
                                     child: GestureDetector(
                                   onTap: () {},
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      const Expanded(child: SizedBox()),
                                       Assets.images.mine.offlineCache.image(width: 26.w, height: 26.w),
-                                      Text(
+                                      const Text(
                                         "离线缓存",
-                                        style: TextStyle(fontSize: 15.sp),
+                                        style: TextStyle(fontSize: 15),
                                       ),
-                                      const Expanded(child: SizedBox()),
                                     ],
                                   ),
                                 )),
@@ -301,14 +297,13 @@ class _MinePageState extends State<MinePage> {
                                     child: GestureDetector(
                                   onTap: () {},
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      const Expanded(child: SizedBox()),
                                       Assets.images.mine.history.image(width: 26.w, height: 26.w),
-                                      Text(
+                                      const Text(
                                         "浏览记录",
-                                        style: TextStyle(fontSize: 15.sp),
+                                        style: TextStyle(fontSize: 15),
                                       ),
-                                      const Expanded(child: SizedBox()),
                                     ],
                                   ),
                                 )),
@@ -316,14 +311,13 @@ class _MinePageState extends State<MinePage> {
                                     child: GestureDetector(
                                   onTap: () {},
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      const Expanded(child: SizedBox()),
                                       Assets.images.mine.myCollection.image(width: 26.w, height: 26.w),
-                                      Text(
+                                      const Text(
                                         "我的收藏",
-                                        style: TextStyle(fontSize: 15.sp),
+                                        style: TextStyle(fontSize: 15),
                                       ),
-                                      const Expanded(child: SizedBox()),
                                     ],
                                   ),
                                 )),
@@ -331,14 +325,13 @@ class _MinePageState extends State<MinePage> {
                                     child: GestureDetector(
                                   onTap: () {},
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      const Expanded(child: SizedBox()),
                                       Assets.images.mine.laterView.image(width: 26.w, height: 26.w),
-                                      Text(
+                                      const Text(
                                         "稍后再看",
-                                        style: TextStyle(fontSize: 15.sp),
-                                      ),
-                                      const Expanded(child: SizedBox()),
+                                        style: TextStyle(fontSize: 15),
+                                      )
                                     ],
                                   ),
                                 )),
@@ -365,7 +358,7 @@ class _MinePageState extends State<MinePage> {
                                       transform: Matrix4.translationValues(-20, 0.0, 0.0),
                                       child: Text(
                                         data.keys.first,
-                                        style: TextStyle(fontSize: 15.sp),
+                                        style: const TextStyle(fontSize: 15),
                                       ),
                                     ),
                                     leading: data.values.first,

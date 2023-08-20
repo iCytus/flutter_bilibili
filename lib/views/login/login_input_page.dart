@@ -159,7 +159,7 @@ class _LoginInputPageState extends State<LoginInputPage> {
                     ],
                   ),
                 ),
-                Expanded(child: SizedBox())
+                Spacer()
               ],
             ),
           );

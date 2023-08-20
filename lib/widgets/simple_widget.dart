@@ -245,7 +245,7 @@ void showMoreView(BuildContext context, String ownerName, String area, String ch
                       }).toList(),
                     ),
                   )),
-              const Expanded(child: SizedBox()),
+              const Spacer(),
 
               GFButton(
                 onPressed: () {

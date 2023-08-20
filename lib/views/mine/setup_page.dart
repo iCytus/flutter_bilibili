@@ -58,7 +58,7 @@ class SetUpPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(m.keys.first),
-                        const Expanded(child: SizedBox()),
+                        const Spacer(),
                         Icon(
                           Icons.keyboard_arrow_right,
                           size: 20.w,

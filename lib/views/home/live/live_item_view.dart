@@ -41,7 +41,7 @@ class LiveItemView extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(model.uname, style: TextStyle(fontSize: 12.sp, overflow: TextOverflow.ellipsis, color: Colors.white)),
-                              const Expanded(child: SizedBox()),
+                              const Spacer(),
                               Padding(
                                 padding: const EdgeInsets.only(right: 3.0),
                                 child: Icon(
@@ -87,7 +87,7 @@ class LiveItemView extends StatelessWidget {
                             children: [
                               Text(model.parentName,
                                   style: TextStyle(fontSize: 12.sp, overflow: TextOverflow.ellipsis, color: Colors.grey)),
-                              const Expanded(child: SizedBox()),
+                              const Spacer(),
                               GestureDetector(
                                   onTap: () {
                                     // showMoreView(context, model.owner.name, "", "");

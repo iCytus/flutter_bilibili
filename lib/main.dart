@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         minTextAdapt: true,
@@ -105,7 +104,7 @@ class MyApp extends StatelessWidget {
                       builder: FlutterSmartDialog.init(
                         builder: (context, widget) {
                           return MediaQuery(
-                            ///Setting font does not change with system font size
+                            /// Setting font does not change with system font size
                             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: widget!,
                           );
                         }

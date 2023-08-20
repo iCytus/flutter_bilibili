@@ -67,7 +67,7 @@ class RecommendItemView extends StatelessWidget {
                                   viewCount(model.stat.danmaku),
                                   style: TextStyle(fontSize: imageFontSize, color: Colors.white),
                                 ),
-                                const Expanded(child: SizedBox()),
+                                const Spacer(),
                                 Text(
                                   duration2timeStr(model.duration),
                                   style: TextStyle(fontSize: imageFontSize, color: Colors.white),

@@ -61,7 +61,7 @@ class SimilarItemView extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 16)
                   ),
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                   Row(
                     children: [
                       Center(
@@ -86,7 +86,7 @@ class SimilarItemView extends StatelessWidget {
                         "${viewCount(model.arc.stat.view)}观看・${timeAgo2Str(model.arc.pubdate)}",
                         style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                       ),
-                      const Expanded(child: SizedBox()),
+                      const Spacer(),
                       GestureDetector(
                           onTap: () {
                             showMaterialModalBottomSheet(

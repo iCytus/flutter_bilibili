@@ -214,7 +214,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                           height: kToolbarHeight,
                           child: Row(children: [
                             IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.orange,)),
-                            Expanded(child: SizedBox()),
+                            Spacer(),
                             IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_sharp, color: Colors.red,))
                           ],),
                         )
@@ -267,7 +267,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
             child: Row(
               children: [
                 _buildTabBarView(),
-                const Expanded(child: SizedBox()),
+                const Spacer(),
                 _buildDanmukaBtnView(state),
               ],
             ),

@@ -61,7 +61,7 @@ class HotItemView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 13)
                   ),
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                   model.rcmdReason.content != ""
                       ? Row(
                           children: [
@@ -77,11 +77,11 @@ class HotItemView extends StatelessWidget {
                                     )
                                   ],
                                 )),
-                            const Expanded(child: SizedBox())
+                            const Spacer()
                           ],
                         )
                       : const SizedBox(),
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                   Row(
                     children: [
                       Center(
@@ -106,7 +106,7 @@ class HotItemView extends StatelessWidget {
                         "${viewCount(model.stat.view)}观看・${timeAgo2Str(model.pubdate)}",
                         style: TextStyle(fontSize: 12.sp, color: Colors.grey),
                       ),
-                      const Expanded(child: SizedBox()),
+                      const Spacer(),
                       GestureDetector(
                           onTap: () {
                             showMaterialModalBottomSheet(

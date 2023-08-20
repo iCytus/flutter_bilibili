@@ -246,7 +246,7 @@ class VideoPlayBloc extends Bloc<VideoPlayEvent, VideoPlayState> {
           /* timelineNotifier: timelineNotifier, */
           bullets: bullets,
           child: const SizedBox(),
-        ),
+        )
       );
 
       emit(VideoPlayInitComplete(

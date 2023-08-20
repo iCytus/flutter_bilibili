@@ -36,13 +36,13 @@ class _SetThemePageState extends State<SetThemePage> {
             ListTile(
               leading: Column(
                 children: [
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                   Container(
                     width: 16.w,
                     height: 16.w,
                     decoration: BoxDecoration(color: const Color.fromRGBO(251, 114, 153, 1), borderRadius: BorderRadius.circular(2.w)),
                   ),
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                 ],
               ),
               title: Transform(
@@ -59,13 +59,13 @@ class _SetThemePageState extends State<SetThemePage> {
             ListTile(
               leading: Column(
                 children: [
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                   Container(
                     width: 16.w,
                     height: 16.w,
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(2.w)),
                   ),
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                 ],
               ),
               title: Transform(
@@ -82,13 +82,13 @@ class _SetThemePageState extends State<SetThemePage> {
             ListTile(
               leading: Column(
                 children: [
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                   Container(
                     width: 16.w,
                     height: 16.w,
                     decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(2.w)),
                   ),
-                  const Expanded(child: SizedBox()),
+                  const Spacer(),
                 ],
               ),
               title: Transform(
