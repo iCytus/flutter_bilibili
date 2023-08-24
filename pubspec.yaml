@@ -73,6 +73,10 @@ dependencies:
       url: https://github.com/xiaoxie/flutter_scan.git
       ref: main
   shared_preferences: ^2.2.0  # 本地化存储
+
+  sentry_dart_plugin: ^1.0.0  # 应用运行监控
+  sentry_flutter: ^7.9.0  #
+
   tabbar_gradient_indicator: ^1.0.1  # tab导航
   video_player: ^2.7.0
   wechat_assets_picker: ^8.4.3
@@ -146,3 +150,18 @@ flutter:
 #        - asset: assets/fonts/Alibaba-PuHuiTi-Regular.ttf
 flutter_intl:
   enabled: true
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: false
+  upload_sources: false
+  project: "bilibili_bloc"
+  org: "meiyou"
+  auth_token: ...
+  url: ...
+  wait_for_processing: false
+  log_level: error
+  release: ...
+  web_build_path: ...
+  commits: auto
+  ignore_missing: true

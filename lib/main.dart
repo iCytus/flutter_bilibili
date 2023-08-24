@@ -2,7 +2,11 @@ import 'package:bilibili_bloc/blocs/bottom_tab/bottom_tab_cubit.dart';
 import 'package:bilibili_bloc/blocs/locale/locale_cubit.dart';
 import 'package:bilibili_bloc/blocs/login/login_bloc.dart';
 import 'package:bilibili_bloc/blocs/theme/custom_theme_cubit.dart';
+import 'package:bilibili_bloc/config/share_pre_keys.dart';
+import 'package:bilibili_bloc/utils/shared_pre_utils.dart';
 import 'package:bilibili_bloc/views/home/home_page.dart';
+import 'package:bilibili_bloc/widgets/simple_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'blocs/home/home_bloc.dart';
 import 'blocs/video_play/video_play_bloc.dart';
 import 'config/custom_colors.dart';
@@ -26,8 +31,193 @@ Future<void> main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: directory,
   );
-  runApp(const MyApp());
+  bool? isagree = await SharedPreUtils.getBool(SharePreKeys.userAgree);
+  if (isagree != null && isagree) {
+    await SentryFlutter.init(
+          (options) {
+        options.dsn = 'https://2f715eef37f2e089eb0e4fbe27cb1d1f@o4505741678346240.ingest.sentry.io/4505741681950720';
+        // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+        // We recommend adjusting this value in production.
+        options.tracesSampleRate = 1.0;
+      },
+      appRunner: () => runApp(MyApp()),
+    );
+  } else {
+    runApp(const InitMyApp());
+  }
+  // await SentryFlutter.init(
+  //       (options) {
+  //     options.dsn = 'https://2f715eef37f2e089eb0e4fbe27cb1d1f@o4505741678346240.ingest.sentry.io/4505741681950720';
+  //     // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  //     // We recommend adjusting this value in production.
+  //     options.tracesSampleRate = 1.0;
+  //   },
+  //   appRunner: () => runApp(MyApp()),
+  // );
 }
+
+// 用于隐私权限弹窗确认前
+class InitMyApp extends StatelessWidget {
+  const InitMyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: false,
+      builder: (context, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body: Center(
+              child: Container(
+                width: 1.sw - 80.w,
+                height: 250.w,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20.w))),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 25.w,
+                    ),
+                    Text(
+                      "个人信息保护提示",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 15.w,
+                    ),
+                    Container(
+                      height: 100.w,
+                      margin: EdgeInsets.only(left: 25.w, right: 25.w),
+                      child: ScrollConfiguration(
+                        behavior: EUMNoScrollBehavior(),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Text.rich(TextSpan(children: [
+                            TextSpan(
+                                text: "我们非常重视您的个人信息保护。关于个人信息收集和使用的详细信息，在使用氢信企业版前，请您认真查阅",
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                    height: 1.3,
+                                    fontFamily: "SourceHanSansSC")),
+                            TextSpan(
+                                text: "《隐私政策》",
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.blue,
+                                    height: 1.3,
+                                    fontFamily: "SourceHanSansSC"),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print("隐私政策");
+                                  }),
+                            TextSpan(
+                                text: "及",
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                    height: 1.3,
+                                    fontFamily: "SourceHanSansSC")),
+                            TextSpan(
+                                text: "《用户协议》",
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.blue,
+                                    height: 1.3,
+                                    fontFamily: "SourceHanSansSC"),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    print("用户协议");
+                                  }),
+                            TextSpan(
+                                text:
+                                "您同意并接受全部条款后再使用我们的服务。",
+                                style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                    height: 1.3,
+                                    fontFamily: "SourceHanSansSC")),
+                          ])),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: Container()),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 36.w,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              print("不同意");
+
+                            },
+                            child: Text(
+                              "不同意",
+                              style: TextStyle(fontSize: 14.sp, color: Colors.black),
+                            ),
+                            style: ButtonStyle(
+                                minimumSize:
+                                MaterialStateProperty.all(Size(90.w, 40.w)),
+                                backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                                side: MaterialStateProperty.all(
+                                    BorderSide(width: 1.w, color: Colors.grey)),
+                                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.w))))),
+                        Flexible(child: Container()),
+                        TextButton(
+                          onPressed: () async {
+                            print("同意");
+                            await SharedPreUtils.setBool(SharePreKeys.userAgree, true);
+                            await SentryFlutter.init(
+                                  (options) {
+                                options.dsn = 'https://2f715eef37f2e089eb0e4fbe27cb1d1f@o4505741678346240.ingest.sentry.io/4505741681950720';
+                                // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+                                // We recommend adjusting this value in production.
+                                options.tracesSampleRate = 1.0;
+                              },
+                              appRunner: () => runApp(MyApp()),
+                            );
+                          },
+                          child: Text(
+                            "同意",
+                            style: TextStyle(fontSize: 14.sp, color: Colors.white),
+                          ),
+                          style: ButtonStyle(
+                              minimumSize: MaterialStateProperty.all(Size(90.w, 40.w)),
+                              backgroundColor: MaterialStateProperty.all(Colors.blue),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.w)))),
+                        ),
+                        SizedBox(
+                          width: 36.w,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 25.w,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

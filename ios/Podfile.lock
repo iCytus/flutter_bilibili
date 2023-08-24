@@ -23,6 +23,18 @@ PODS:
     - FlutterMacOS
   - scan (0.0.1):
     - Flutter
+  - Sentry (8.9.1):
+    - Sentry/Core (= 8.9.1)
+    - SentryPrivate (= 8.9.1)
+  - Sentry/Core (8.9.1):
+    - SentryPrivate (= 8.9.1)
+  - Sentry/HybridSDK (8.9.1):
+    - SentryPrivate (= 8.9.1)
+  - sentry_flutter (0.0.1):
+    - Flutter
+    - FlutterMacOS
+    - Sentry/HybridSDK (= 8.9.1)
+  - SentryPrivate (8.9.1)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -42,6 +54,8 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
   - scan (from `.symlinks/plugins/scan/ios`)
+  - Sentry (~> 8.9.1)
+  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -51,6 +65,8 @@ SPEC REPOS:
   trunk:
     - FMDB
     - OrderedSet
+    - Sentry
+    - SentryPrivate
 
 EXTERNAL SOURCES:
   Flutter:
@@ -67,6 +83,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/photo_manager/ios"
   scan:
     :path: ".symlinks/plugins/scan/ios"
+  sentry_flutter:
+    :path: ".symlinks/plugins/sentry_flutter/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/ios"
   sqflite:
@@ -86,11 +104,14 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
   scan: aea35bb4aa59ccc8839c576a18cd57c7d492cc86
+  Sentry: e3203780941722a1fcfee99e351de14244c7f806
+  sentry_flutter: 8f0ffd53088e6a4d50c095852c5cad9e4405025c
+  SentryPrivate: 5e3683390f66611fc7c6215e27645873adb55d13
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
 
-PODFILE CHECKSUM: 6983977bda4bce01420cfee0c7b49d14d4b6dcd3
+PODFILE CHECKSUM: cb3b67152572204cbc40ba36c391c1c8359676f9
 
 COCOAPODS: 1.12.1

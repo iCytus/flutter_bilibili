@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 
-import 'package:bilibili_bloc/widgets/test_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
 import '../../blocs/home/home_bloc.dart';
 import '../../config/share_pre_keys.dart';
@@ -149,18 +149,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: ()  async {
-              /* 语言切换
-              var locale = Localizations.localeOf(context);
-              print("locale: ${locale.languageCode}");
-              if (locale.languageCode == "zh") {
-                context.read<LocaleCubit>().changeLocale(const Locale('en', 'US'));
-              } else {
-                context.read<LocaleCubit>().changeLocale(const Locale('zh'));
+              /* 语言切换 */
+              // var locale = Localizations.localeOf(context);
+              // print("locale: ${locale.languageCode}");
+              // if (locale.languageCode == "zh") {
+              //   context.read<LocaleCubit>().changeLocale(const Locale('en', 'US'));
+              // } else {
+              //   context.read<LocaleCubit>().changeLocale(const Locale('zh'));
+              // }
+              try {
+                throw StateError("Invalid message");
+
+              } catch (exception, stackTrace) {
+                await Sentry.captureException(
+                  exception,
+                  stackTrace: stackTrace,
+                );
               }
-              */
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return TestPage();
-              }));
             },
             child: Icon(Icons.add),
           ),

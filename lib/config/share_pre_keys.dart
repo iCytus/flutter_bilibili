@@ -1,4 +1,5 @@
 class SharePreKeys {
+  static String userAgree = "userAgree";
   static String isLogin = "isLogin";
   static String userInfo = "userInfo";
   static String startTimerTime = "startTimerTime";  // 发送短信按钮点击的时间
