@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'wechat_group_avatars.dart';
+
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
 
@@ -70,6 +72,33 @@ class _TestPageState extends State<TestPage> with SingleTickerProviderStateMixin
           context: context,
           removeTop: true,
           child: ListView.builder(itemBuilder: (context, index) {
+
+            if (index == 0) {
+              return const WeChatGroupChatIcon(avatars: [
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+                "https://img1.baidu.com/it/u=169674502,3751761036&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500",
+              ],);
+            }
+
+            if (index == 1) {
+              return SizedBox(
+                height: 200.w,
+                width: 1.sw,
+                child: Column(
+                  children: [
+                    TextButton(onPressed: () {}, child: Text("第一个按钮")),
+                    const Spacer(),
+                    TextButton(onPressed: () {}, child: Text("第二个按钮")),
+                  ],
+                ),
+              );
+            }
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 6.w, horizontal: 6.w),
               child: Text("index - $index"),

@@ -19,6 +19,7 @@ import '../../blocs/locale/locale_cubit.dart';
 import '../../blocs/login/login_bloc.dart';
 import '../../models/user_model.dart';
 import '../../widgets/simple_widget.dart';
+import '../../widgets/test_page.dart';
 import 'hot/hot_page.dart';
 import 'live/live_page.dart';
 
@@ -157,15 +158,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               // } else {
               //   context.read<LocaleCubit>().changeLocale(const Locale('zh'));
               // }
-              try {
-                throw StateError("Invalid message");
-
-              } catch (exception, stackTrace) {
-                await Sentry.captureException(
-                  exception,
-                  stackTrace: stackTrace,
-                );
-              }
+              // try {
+              //   throw StateError("Invalid message");
+              //
+              // } catch (exception, stackTrace) {
+              //   await Sentry.captureException(
+              //     exception,
+              //     stackTrace: stackTrace,
+              //   );
+              // }
+              // 微信群聊头像九宫格
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                return TestPage();
+              }));
             },
             child: Icon(Icons.add),
           ),

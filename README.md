@@ -6,3 +6,23 @@
 
 项目里的数据来源于项目 [bilibili-api](https://github.com/nemo2011/bilibili-api) 的接口调用得到的
 
+**部分截图**
+
+<p align = "center">    
+<img  src="./md_assets/1.png" width="450" />
+<img  src="./md_assets/2.png" width="450" />
+<img  src="./md_assets/3.png" width="450" />
+<img  src="./md_assets/4.png" width="450" />
+<img  src="./md_assets/5.png" width="450" />
+</p>
+
+
+
+
+
+
+
+
+
+
+
