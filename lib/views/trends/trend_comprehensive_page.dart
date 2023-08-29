@@ -19,6 +19,7 @@ class _TrendComprehensivePageState extends State<TrendComprehensivePage> {
   final EasyRefreshController _easyRefreshController = EasyRefreshController(
     controlFinishRefresh: true,
     controlFinishLoad: true,
+
   );
 
   @override

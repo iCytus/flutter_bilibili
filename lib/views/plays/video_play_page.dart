@@ -1,4 +1,5 @@
 import 'package:bilibili_bloc/models/hot_data_model.dart';
+import 'package:bilibili_bloc/models/video_comment_model.dart';
 import 'package:bilibili_bloc/models/video_detail_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
@@ -12,10 +13,12 @@ import 'package:tabbar_gradient_indicator/tabbar_gradient_indicator.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../blocs/video_play/video_play_bloc.dart';
+import '../../config/test_data.dart';
 import '../../gen/assets.gen.dart';
 import '../../models/custom_data_model.dart';
 import '../../models/videoItem_data_model.dart';
 import '../../utils/change_Str_utils.dart';
+import 'comment_item_view.dart';
 import 'similar_item_view.dart';
 import 'video_shimmer_page.dart';
 
@@ -104,25 +107,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                     ];
                   },
                   body: TabBarView(
-                    children: [
-                      _buildSnapshotView(),
-                      Container(
-                        color: Colors.pink,
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 30,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text("index - $index"),
-                                );
-                              }),
-                        ),
-                      )
-                    ],
+                    children: [_buildSnapshotView(), _buildCommentsView()],
                   ),
                 ),
               ),
@@ -212,11 +197,23 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                         SizedBox(
                           width: 1.sw,
                           height: kToolbarHeight,
-                          child: Row(children: [
-                            IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.orange,)),
-                            Spacer(),
-                            IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_sharp, color: Colors.red,))
-                          ],),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios_new_outlined,
+                                    color: Colors.orange,
+                                  )),
+                              Spacer(),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.more_vert_sharp,
+                                    color: Colors.red,
+                                  ))
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -266,7 +263,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
             width: 1.sw,
             child: Row(
               children: [
-                _buildTabBarView(),
+                _buildTabBarView(state.model?.stat.reply ?? 0),
                 const Spacer(),
                 _buildDanmukaBtnView(state),
               ],
@@ -278,14 +275,14 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
   }
 
   // 简介&评论 tabbar
-  Widget _buildTabBarView() {
+  Widget _buildTabBarView(int replyCount) {
     return TabBar(
       onTap: (index) {
         //print("index：$index");
       },
       padding: EdgeInsets.zero,
       enableFeedback: true,
-      tabs: ["简介", "评论"]
+      tabs: ["简介", replyCount > 0 ? "评论 $replyCount" : "评论"]
           .map((e) => Tab(
                 text: e,
                 height: 36.w,
@@ -398,10 +395,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                           child: Column(
                             children: [
                               Assets.images.video.dislikeCustom.image(width: coinbtnSize, height: coinbtnSize),
-                              Text(
-                                "不喜欢",
-                                style: textBtnsStyle,
-                              ),
+                              Text("不喜欢", style: textBtnsStyle),
                             ],
                           ),
                         ),
@@ -419,7 +413,7 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                           child: Column(
                             children: [
                               Assets.images.video.collectCustom.image(width: coinbtnSize, height: coinbtnSize),
-                              Text("${state.model!.stat.favorite}", style: textBtnsStyle),
+                              Text("${state.model!.stat.favorite}", style: textBtnsStyle)
                             ],
                           ),
                         ),
@@ -448,13 +442,34 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                   itemCount: model.ugcSeason!.sections.first.episodes.length,
                   itemBuilder: (context, index) {
                     Episode e = model.ugcSeason!.sections.first.episodes.elementAt(index);
-                    return SimilarItemView(
-                      model: e,
-                    );
+                    return SimilarItemView(model: e);
                   });
             },
           )
         ],
+      ),
+    );
+  }
+
+  // tabview: 评论
+  Widget _buildCommentsView() {
+    return Container(
+      color: Theme.of(context).cardColor,
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: ListView.separated(
+          shrinkWrap: true,
+          itemCount: commmentsDataList.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            CommentDetailModel model = CommentDetailModel.fromJson(commmentsDataList.elementAt(index));
+            return CommentItemView(model: model);
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(height: 0.5.w, color: Colors.grey[400]);
+          },
+        ),
       ),
     );
   }
@@ -593,8 +608,8 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
                           ? GestureDetector(
                               onTap: () {
                                 // 这个点击时间是弹出键盘输入弹幕
-                                context.read<VideoPlayBloc>().add(
-                                    DanmakuInputEvent(false, state.videoPlayerController!.value.isPlaying, isReadyInput: !state.isReadyInput));
+                                context.read<VideoPlayBloc>().add(DanmakuInputEvent(false, state.videoPlayerController!.value.isPlaying,
+                                    isReadyInput: !state.isReadyInput));
                               },
                               child: Container(
                                 width: 80.w,
@@ -646,7 +661,11 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
     //     Uri.parse("https://qingx-h5-1253674864.cos.ap-guangzhou.myqcloud.com/video/2023/3/31/aa5a29573061443997e6fb7134e52513.mp4"));
     // await videoPlayerController.initialize();
     Future.delayed(const Duration(seconds: 1), () {
-      context.read<VideoPlayBloc>().add(LoadVideoDetail(true, false, bvid: widget.bvid, ));
+      context.read<VideoPlayBloc>().add(LoadVideoDetail(
+            true,
+            false,
+            bvid: widget.bvid,
+          ));
     });
   }
 

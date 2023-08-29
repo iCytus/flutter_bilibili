@@ -219,7 +219,7 @@ class TrendVideoItemView extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.w),
           child: Text(
             title,
-            style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis),
           ),
         ),
       ],
@@ -237,13 +237,13 @@ class TrendTextItemView extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: RichReadMoreText(
-        TextSpan(text: text + text, style: TextStyle(fontSize: 18.sp)),
+        TextSpan(text: text + text, style: TextStyle(fontSize: 16)),
         settings: LineModeSettings(
           trimLines: 4,
           trimCollapsedText: ' 展开',
           trimExpandedText: ' 收起 ',
-          moreStyle: TextStyle(fontSize: 16.sp, color: Colors.blue),
-          lessStyle: TextStyle(fontSize: 16.sp, color: Colors.blue),
+          moreStyle: TextStyle(fontSize: 16, color: Colors.blue),
+          lessStyle: TextStyle(fontSize: 16, color: Colors.blue),
           onPressReadMore: () {},
           onPressReadLess: () {},
         ),
@@ -267,7 +267,7 @@ class TrendPhotosView extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.w),
           child: Text(
             title,
-            style: TextStyle(fontSize: 19.sp, overflow: TextOverflow.ellipsis),
+            style: const TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis),
           ),
         ),
         list.length > 1
@@ -386,11 +386,11 @@ class TrendForwardItemView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.w),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 3.w),
           child: Row(children: [
             Text(
               title,
-              style: TextStyle(fontSize: 19.sp, overflow: TextOverflow.ellipsis),
+              style: const TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis),
             )
           ],),
         ),
