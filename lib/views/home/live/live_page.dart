@@ -28,14 +28,15 @@ class _LivePageState extends State<LivePage> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (BuildContext context, state) {
         List<LiveDataModel> list = state.livesList;
-        print("list-length-live: ${list.length}");
+        //print("list-length-live: ${list.length}");
         return EasyRefresh.builder(
           onRefresh: () async {
             print("下拉刷新-live");
-            context.read<HomeBloc>().add(LoadDateEvent(refreshController: _easyRefreshController, style: RefreshStyle.live));
+            context.read<HomeBloc>().add(LoadDataEvent(refreshController: _easyRefreshController, style: RefreshStyle.live));
           },
             header: const CustomRefreshHeader(),
           controller: _easyRefreshController,
+          refreshOnStart: list.isEmpty ? true : false,
           childBuilder: (BuildContext context, ScrollPhysics physics) {
             List<LiveBannerDataModel> ll = state.livesBannerList;
             List<LiveDataModel> list = state.livesList;

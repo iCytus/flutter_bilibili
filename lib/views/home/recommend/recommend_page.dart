@@ -26,13 +26,14 @@ class _RecommendPageState extends State<RecommendPage> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (BuildContext context, state) {
         List<VideoItemDataModel> list = state.recommendList;
-        print("list-length-recommend: ${list.length}");
+        print("list-length-recommend: ${state.runtimeType}");
         return EasyRefresh.builder(
           onRefresh: () async {
             print("下拉刷新-recommend");
-            context.read<HomeBloc>().add(LoadDateEvent(refreshController: _easyRefreshController, style: RefreshStyle.recommend));
+            context.read<HomeBloc>().add(LoadDataEvent(refreshController: _easyRefreshController, style: RefreshStyle.recommend));
           },
           header: const CustomRefreshHeader(),
+          refreshOnStart: list.isEmpty ? true : false,
           controller: _easyRefreshController,
           childBuilder: (BuildContext context, ScrollPhysics physics) {
             return Padding(

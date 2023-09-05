@@ -2,27 +2,39 @@ part of 'home_bloc.dart';
 
 enum RefreshStatus { initial, success, failure }
 
+
 class HomeState extends Equatable {
-  late List<LiveDataModel> livesList;
-  late List<LiveBannerDataModel> livesBannerList;
-  late List<VideoItemDataModel> recommendList;
-  late List<HotDataModel> hotList;
-  late List<TrendDataModel> trendList;
-  HomeState({this.livesList = const [], this.livesBannerList = const [], this.recommendList = const [], this.hotList = const [], this.trendList = const []});
+  final List<LiveDataModel> livesList;
+  final List<LiveBannerDataModel> livesBannerList;
+  final List<VideoItemDataModel> recommendList;
+  final List<HotDataModel> hotList;
+  final List<TrendDataModel> trendList;
+  final RefreshStyle? style;
+  const HomeState({
+    this.style,
+    this.livesList = const [],
+    this.livesBannerList = const [],
+    this.recommendList = const [],
+    this.hotList = const [],
+    this.trendList = const [],
+  });
 
   HomeState copyWith({
+    RefreshStyle? style,
     List<LiveDataModel>? livesList,
     List<LiveBannerDataModel>? livesBannerList,
     List<VideoItemDataModel>? recommendList,
     List<HotDataModel>? hotList,
-    List<TrendDataModel>? trendList
+    List<TrendDataModel>? trendList,
   }) {
+    print("HomeState.copyWith: $style");
     return HomeState(
-        livesList: livesList ?? this.livesList,
-        livesBannerList: livesBannerList ?? this.livesBannerList,
-        recommendList: recommendList ?? this.recommendList,
-        hotList: hotList ?? this.hotList,
-        trendList: trendList ?? this.trendList
+      style: style ?? this.style,
+      livesList: livesList ?? this.livesList,
+      livesBannerList: livesBannerList ?? this.livesBannerList,
+      recommendList: recommendList ?? this.recommendList,
+      hotList: hotList ?? this.hotList,
+      trendList: trendList ?? this.trendList,
     );
   }
 
@@ -30,5 +42,6 @@ class HomeState extends Equatable {
   List<Object> get props => [livesList, livesBannerList, recommendList, hotList, trendList];
 }
 
-class HomeInitial extends HomeState {}
-
+class HomeInitial extends HomeState {
+  const HomeInitial();
+}

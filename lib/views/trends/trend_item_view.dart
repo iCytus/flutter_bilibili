@@ -237,13 +237,13 @@ class TrendTextItemView extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: RichReadMoreText(
-        TextSpan(text: text + text, style: TextStyle(fontSize: 16)),
+        TextSpan(text: text + text, style: const TextStyle(fontSize: 16)),
         settings: LineModeSettings(
           trimLines: 4,
           trimCollapsedText: ' 展开',
           trimExpandedText: ' 收起 ',
-          moreStyle: TextStyle(fontSize: 16, color: Colors.blue),
-          lessStyle: TextStyle(fontSize: 16, color: Colors.blue),
+          moreStyle: const TextStyle(fontSize: 16, color: Colors.blue),
+          lessStyle: const TextStyle(fontSize: 16, color: Colors.blue),
           onPressReadMore: () {},
           onPressReadLess: () {},
         ),

@@ -10,6 +10,10 @@ abstract class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadDateEvent extends HomeEvent {
-  const LoadDateEvent({super.refreshController, super.style});
+class LoadDataEvent extends HomeEvent {
+  const LoadDataEvent({super.refreshController, super.style});
+}
+
+class RemindRefreshEvent extends HomeEvent {
+  const RemindRefreshEvent();
 }

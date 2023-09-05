@@ -144,15 +144,13 @@ class CommentItemView extends StatelessWidget {
                           return Text.rich(
                             TextSpan(
                                 text: "共${model.rcount}条回复",
-                                style: TextStyle(fontSize: 13, color: Colors.blue),
-                                children: [TextSpan(text: " > ", style: TextStyle(color: Colors.grey))]),
+                                style: const TextStyle(fontSize: 13, color: Colors.blue),
+                                children: const [TextSpan(text: " > ", style: TextStyle(color: Colors.grey))]),
                           );
                         }
                       },
                       separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: 4.w,
-                        );
+                        return SizedBox(height: 4.w);
                       },
                     ),
                   ),

@@ -111,7 +111,7 @@ class _PicSwiperState extends State<PicSwiper> with TickerProviderStateMixin {
                     }
                     return GestureConfig(
                       inPageView: true,
-                      initialScale: initialScale!,
+                      initialScale: initialScale,
                       maxScale: max(initialScale, 5.0),
                       animationMaxScale: max(initialScale, 5.0),
                       initialAlignment: InitialAlignment.center,

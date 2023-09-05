@@ -34,7 +34,7 @@ class _TrendVideosPageState extends State<TrendVideosPage> {
       return EasyRefresh.builder(
           onRefresh: () async {
             print("下拉刷新-videos");
-            context.read<HomeBloc>().add(LoadDateEvent(refreshController: _easyRefreshController, style: RefreshStyle.comprehensive));
+            context.read<HomeBloc>().add(LoadDataEvent(refreshController: _easyRefreshController, style: RefreshStyle.comprehensive));
           },
           header: const CustomRefreshHeader(),
           controller: _easyRefreshController,

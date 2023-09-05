@@ -503,27 +503,19 @@ class _VideoPlayPageState extends State<VideoPlayPage> with SingleTickerProvider
           Row(
             children: [
               Assets.images.home.playRectangle.image(width: 15.w, height: 11.w, color: Colors.grey),
-              SizedBox(
-                width: 3.w,
-              ),
+              SizedBox(width: 3.w),
               Text(
                 viewCount(model.stat.view),
                 style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
               ),
-              SizedBox(
-                width: 13.w,
-              ),
+              SizedBox(width: 13.w),
               Assets.images.home.danmu.image(width: 15.w, height: 11.w, color: Colors.grey),
-              SizedBox(
-                width: 3.w,
-              ),
+              SizedBox(width: 3.w),
               Text(
                 viewCount(model.stat.danmaku),
                 style: TextStyle(fontSize: imageFontSize, color: Colors.grey),
               ),
-              SizedBox(
-                width: 13.w,
-              ),
+              SizedBox(width: 13.w),
               Text(
                 formatStrTime(model.pubdate),
                 style: TextStyle(fontSize: imageFontSize, color: Colors.grey),

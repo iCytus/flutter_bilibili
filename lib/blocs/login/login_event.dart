@@ -11,7 +11,5 @@ class UserLoginEvent extends LoginEvent {
   const UserLoginEvent({required this.model});
 }
 
-class TestEvent extends LoginEvent {}
-
 
 

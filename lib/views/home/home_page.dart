@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -135,7 +134,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     .toList(),
                 // labelColor: const Color.fromRGBO(251, 114, 153, 1),
                 // unselectedLabelColor: Colors.black,
-                indicator: TabBarGradientIndicator(gradientColor: [Theme.of(context).tabBarTheme.indicatorColor!, Theme.of(context).tabBarTheme.indicatorColor!], indicatorWidth: 4),
+                indicator: TabBarGradientIndicator(
+                    gradientColor: [Theme.of(context).tabBarTheme.indicatorColor!, Theme.of(context).tabBarTheme.indicatorColor!],
+                    indicatorWidth: 4),
                 indicatorSize: TabBarIndicatorSize.label,
                 isScrollable: true,
               ),
@@ -149,7 +150,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: ()  async {
+            onPressed: () async {
               /* 语言切换 */
               // var locale = Localizations.localeOf(context);
               // print("locale: ${locale.languageCode}");

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'wechat_group_avatars.dart';
@@ -15,6 +16,7 @@ class _TestPageState extends State<TestPage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    context.read();
   }
 
   @override
@@ -25,7 +27,7 @@ class _TestPageState extends State<TestPage> with SingleTickerProviderStateMixin
           SliverAppBar(
             //当此值为true时 SliverAppBar 会固定在页面顶部
             //当此值为fase时 SliverAppBar 会随着滑动向上滑动
-            systemOverlayStyle: SystemUiOverlayStyle(
+            systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarColor: Colors.orange
             ),
             pinned: true,
@@ -41,7 +43,7 @@ class _TestPageState extends State<TestPage> with SingleTickerProviderStateMixin
             //背景颜色
             backgroundColor: Colors.white,
             //App bar 的亮度，有白色和黑色两种主题，默认值为 ThemeData.primaryColorBrightness
-            brightness: Brightness.light,
+            // brightness: Brightness.light,
             //在标题左侧显示的一个控件，在首页通常显示应用的 logo；在其他界面通常显示为返回按钮
             leading: IconButton(
                 icon: Icon(Icons.abc),

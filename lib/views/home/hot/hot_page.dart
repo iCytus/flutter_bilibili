@@ -25,16 +25,19 @@ class _HotPageState extends State<HotPage> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (BuildContext context, state) {
         List<HotDataModel> list = state.hotList;
-        print("list-length-hot: ${list.length}");
+        print("list-length-hot: ${state.runtimeType}");
+        print("context-hot: ${context.read<HomeBloc>().state.style}");
+        //print("list-length-hot: ${list.length}");
         return Scaffold(
           //backgroundColor: Colors.white,
           body: EasyRefresh.builder(
             onRefresh: () async {
               print("下拉刷新-hot");
-              context.read<HomeBloc>().add(LoadDateEvent(refreshController: _easyRefreshController, style: RefreshStyle.hot));
+              context.read<HomeBloc>().add(LoadDataEvent(refreshController: _easyRefreshController, style: RefreshStyle.hot));
             },
             header: const CustomRefreshHeader(),
             controller: _easyRefreshController,
+            refreshOnStart: list.isEmpty ? true : false,
             childBuilder: (BuildContext context, ScrollPhysics physics) {
               return Padding(
                 padding: EdgeInsets.only(left: 6.w, right: 6.w),
