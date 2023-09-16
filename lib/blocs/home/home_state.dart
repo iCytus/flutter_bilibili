@@ -2,16 +2,15 @@ part of 'home_bloc.dart';
 
 enum RefreshStatus { initial, success, failure }
 
-
 class HomeState extends Equatable {
   final List<LiveDataModel> livesList;
   final List<LiveBannerDataModel> livesBannerList;
   final List<VideoItemDataModel> recommendList;
   final List<HotDataModel> hotList;
   final List<TrendDataModel> trendList;
-  final RefreshStyle? style;
+  final RefreshStyle refreshStyle;
   const HomeState({
-    this.style,
+    this.refreshStyle = RefreshStyle.recommend,
     this.livesList = const [],
     this.livesBannerList = const [],
     this.recommendList = const [],
@@ -20,28 +19,23 @@ class HomeState extends Equatable {
   });
 
   HomeState copyWith({
-    RefreshStyle? style,
+    RefreshStyle? refreshStyle,
     List<LiveDataModel>? livesList,
     List<LiveBannerDataModel>? livesBannerList,
     List<VideoItemDataModel>? recommendList,
     List<HotDataModel>? hotList,
     List<TrendDataModel>? trendList,
   }) {
-    print("HomeState.copyWith: $style");
     return HomeState(
-      style: style ?? this.style,
       livesList: livesList ?? this.livesList,
       livesBannerList: livesBannerList ?? this.livesBannerList,
       recommendList: recommendList ?? this.recommendList,
       hotList: hotList ?? this.hotList,
       trendList: trendList ?? this.trendList,
+      refreshStyle: refreshStyle ?? this.refreshStyle
     );
   }
 
   @override
-  List<Object> get props => [livesList, livesBannerList, recommendList, hotList, trendList];
-}
-
-class HomeInitial extends HomeState {
-  const HomeInitial();
+  List<Object> get props => [livesList, livesBannerList, recommendList, hotList, trendList, refreshStyle];
 }

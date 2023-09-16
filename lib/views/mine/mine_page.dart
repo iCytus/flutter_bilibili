@@ -11,6 +11,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import '../../blocs/home/home_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../generated/l10n.dart';
 import '../../widgets/custom_refresh_header.dart';
@@ -139,6 +140,7 @@ class _MinePageState extends State<MinePage> {
                                 trailing: IconButton(
                                   onPressed: () {
                                     // 个人空间
+
                                   },
                                   icon: const Icon(Icons.keyboard_arrow_right_outlined),
                                 ),

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:bilibili_bloc/utils/connect_checker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -34,6 +37,8 @@ Future<void> main() async {
   );
   bool? isAgree = await SharedPreUtils.getBool(SharePreKeys.userAgree);
   if (isAgree != null && isAgree) {
+    ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+    connectionStatus.initialize();
     await SentryFlutter.init(
       (options) {
         options.dsn = 'https://2f715eef37f2e089eb0e4fbe27cb1d1f@o4505741678346240.ingest.sentry.io/4505741681950720';
@@ -153,6 +158,8 @@ class InitMyApp extends StatelessWidget {
                           onPressed: () async {
                             print("同意");
                             await SharedPreUtils.setBool(SharePreKeys.userAgree, true);
+                            ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+                            connectionStatus.initialize();
                             await SentryFlutter.init(
                               (options) {
                                 options.dsn =
@@ -292,10 +299,23 @@ class _MyHomePageState extends State<MyHomePage> {
     TrendsPage(),
     MinePage(),
   ];
+  bool isOffline = false;
+  late StreamSubscription _connectionChangeStream;
 
   @override
   void initState() {
     super.initState();
+    ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+    _connectionChangeStream = connectionStatus.connectionChange.listen(connectionChanged);
+  }
+
+  void connectionChanged(dynamic hasConnection) {
+    // setState(() {
+    //   isOffline = !hasConnection;
+    // });
+    if (!hasConnection) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Color.fromRGBO(251, 114, 153, 1), content: Text("咦？网络好像中断了")));
+    }
   }
 
   @override
@@ -334,7 +354,6 @@ class _MyHomePageState extends State<MyHomePage> {
         unselectedFontSize: 12.sp,
         onTap: (index) {
           final tab = BottomTab.values.elementAt(index);
-
           context.read<BottomTabCubit>().setTab(tab);
           print("tab-index: $index current-index: ${selectedTab.index}");
           if (selectedTab.index == index && [0, 1].contains(index)) {

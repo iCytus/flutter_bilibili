@@ -18,16 +18,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(const HomeState()) {
     on<HomeEvent>((event, emit) {});
     on<LoadDataEvent>((event, emit) {
+      print("event.style： ${event.style}");
       _loadMoreData(event, emit);
     });
     on<RemindRefreshEvent>((event, emit) {
-      print("点击同一个tab时：${state.runtimeType}");
-
+      print("点击同一个tab时-style：${state.refreshStyle}");
     });
   }
 
   Future<void> _loadMoreData(LoadDataEvent event, Emitter<HomeState> emit) async {
-    print("event.style： ${event.style}");
     try {
       switch (event.style) {
         case RefreshStyle.live:
@@ -61,7 +60,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }).toList();
     await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(
-      style: style,
+      refreshStyle: style,
       livesList: state.livesList.toList()..addAll(list),
       livesBannerList: ll,
     ));
@@ -76,7 +75,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }).toList();
     await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(
-      style: style,
+      refreshStyle: style,
       recommendList: state.recommendList.toList()..addAll(list),
     ));
 
@@ -92,7 +91,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     await Future.delayed(const Duration(seconds: 1));
     print("_getMoreHotData-style: $style");
     emit(state.copyWith(
-      style: style,
+      refreshStyle: style,
       hotList: state.hotList.toList()..addAll(list),
     ));
     easyRefreshController.finishRefresh();
@@ -107,7 +106,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }).toList();
     await Future.delayed(const Duration(seconds: 1));
     emit(state.copyWith(
-      style: style,
+      refreshStyle: style,
       trendList: state.trendList.toList()..addAll(list),
     ));
     easyRefreshController.finishRefresh();

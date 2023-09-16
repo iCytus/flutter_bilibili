@@ -31,11 +31,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late UserModel u;
+  late TabController _tabController;
   @override
   void initState() {
     super.initState();
     // todo: 查找本地是否存在已登陆用户
     queryLocalUser();
+    _tabController = TabController(
+      initialIndex: 1,
+      length: 3, // TabBar中的选项数量
+      vsync: this, // 使用SingleTickerProviderStateMixin
+    );
+    // 添加监听器来检测TabBar的滑动位置变化
+    _tabController.addListener(() {
+      print('当前滑动位置-1：${_tabController.index}');
+    });
   }
 
   @override
@@ -121,11 +131,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             bottom: PreferredSize(
               preferredSize: const Size(double.infinity, 32),
               child: TabBar(
+                controller: _tabController,
                 onTap: (index) {
                   print("index：$index");
                 },
                 padding: EdgeInsets.zero,
-                enableFeedback: true,
+                enableFeedback: false,
                 tabs: list
                     .map((e) => Tab(
                           text: e,
@@ -137,12 +148,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 indicator: TabBarGradientIndicator(
                     gradientColor: [Theme.of(context).tabBarTheme.indicatorColor!, Theme.of(context).tabBarTheme.indicatorColor!],
                     indicatorWidth: 4),
+                // indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
                 indicatorSize: TabBarIndicatorSize.label,
                 isScrollable: true,
               ),
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
+            controller: _tabController,
             children: [
               LivePage(),
               RecommendPage(),
@@ -189,5 +202,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       u = model;
       context.read<LoginBloc>().add(UserLoginEvent(model: model));
     }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _tabController.dispose();
+    super.dispose();
   }
 }

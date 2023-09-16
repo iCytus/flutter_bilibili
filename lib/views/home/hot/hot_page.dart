@@ -23,13 +23,17 @@ class _HotPageState extends State<HotPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (prev, current) {
+        print("prev.refreshStyle:${prev.refreshStyle} - current.refreshStyle:${current.refreshStyle}");
+        return prev.refreshStyle != current.refreshStyle;
+      },
       builder: (BuildContext context, state) {
         List<HotDataModel> list = state.hotList;
         print("list-length-hot: ${state.runtimeType}");
-        print("context-hot: ${context.read<HomeBloc>().state.style}");
         //print("list-length-hot: ${list.length}");
+        // print("点击后的-30: ${context.read<HomeBloc>().state.refreshStyle}");
         return Scaffold(
-          //backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
           body: EasyRefresh.builder(
             onRefresh: () async {
               print("下拉刷新-hot");
@@ -47,8 +51,13 @@ class _HotPageState extends State<HotPage> {
                   itemCount: list.length,
                   itemBuilder: (BuildContext context, int index) {
                     HotDataModel model = list.elementAt(index);
-                    return HotItemView(
-                        model: model
+                    return GestureDetector(
+                      onTap: () {
+                        context.read<HomeBloc>().add(const RemindRefreshEvent());
+                      },
+                      child: HotItemView(
+                          model: model
+                      ),
                     );
                   }, separatorBuilder: (BuildContext context, int index) {
                   return Divider(
